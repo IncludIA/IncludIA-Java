@@ -33,7 +33,7 @@ public class Match {
     private boolean isLikedByCandidate;
     private boolean isLikedByRecruiter;
 
-    private void updateStatus() {
+    public void updateStatus() {
         if (isLikedByCandidate && isLikedByRecruiter) {
             this.status = MatchStatus.MATCHED;
         } else if (!isLikedByCandidate) {

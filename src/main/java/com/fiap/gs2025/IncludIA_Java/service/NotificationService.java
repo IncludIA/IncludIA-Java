@@ -4,13 +4,14 @@ import com.fiap.gs2025.IncludIA_Java.dto.response.NotificationResponse;
 import com.fiap.gs2025.IncludIA_Java.enums.NotificationType;
 import com.fiap.gs2025.IncludIA_Java.exceptions.ResourceNotFoundException;
 import com.fiap.gs2025.IncludIA_Java.models.*;
-import com.fiap.gs2025.IncludIA_Java.repository.CandidateRepository;
-import com.fiap.gs2025.IncludIA_Java.repository.ChatRepository;
-import com.fiap.gs2025.IncludIA_Java.repository.NotificationRepository;
-import com.fiap.gs2025.IncludIA_Java.repository.RecruiterRepository;
+import com.fiap.gs2025.IncludIA_Java.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.fiap.gs2025.IncludIA_Java.security.CustomUserDetails;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,9 @@ public class NotificationService {
 
     @Autowired
     private RecruiterRepository recruiterRepository;
+
+    @Autowired
+    private MatchRepository matchRepository;
 
     public void sendMatchNotification(Match match) {
         rabbitTemplate.convertAndSend("match-queue", match.getId());
@@ -69,8 +73,24 @@ public class NotificationService {
         notificationRepository.save(notifCandidate);
         notificationRepository.save(notifRecruiter);
 
-        Chat chat = Chat.create(match);
+        Chat chat = new Chat();
+        chat.setId(UUID.randomUUID());
+        chat.setMatch(match);
+        chat.setCreatedAt(Instant.now());
         chatRepository.save(chat);
+    }
+
+    @Transactional
+    public void createProfileViewNotification(Recruiter recruiter, Candidate candidate) {
+        Notification notification = new Notification();
+        notification.setId(UUID.randomUUID());
+        notification.setCandidate(candidate);
+        notification.setTipo(NotificationType.PERFIL_VISITADO);
+        notification.setMensagem("Um recrutador da empresa " + recruiter.getEmpresa().getNomeFantasia() + " visitou seu perfil.");
+        notification.setRead(false);
+        notification.setCreatedAt(Instant.now());
+
+        notificationRepository.save(notification);
     }
 
     @Transactional(readOnly = true)
@@ -87,6 +107,25 @@ public class NotificationService {
             return notificationRepository.findByRecruiterAndIsReadFalse(recruiter).stream()
                     .map(NotificationResponse::new)
                     .collect(Collectors.toList());
+        }
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<NotificationResponse> getUnreadNotificationsForUser(Pageable pageable) {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String role = userDetails.getAuthorities().iterator().next().getAuthority();
+
+        if ("ROLE_CANDIDATE".equals(role)) {
+            Candidate candidate = candidateRepository.findById(userDetails.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Candidato não encontrado"));
+            return notificationRepository.findByCandidateAndIsReadFalseOrderByCreatedAtDesc(candidate, pageable)
+                    .map(NotificationResponse::new);
+        } else {
+            Recruiter recruiter = recruiterRepository.findById(userDetails.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Recrutador não encontrado"));
+            return notificationRepository.findByRecruiterAndIsReadFalseOrderByCreatedAtDesc(recruiter, pageable)
+                    .map(NotificationResponse::new);
         }
     }
 }

@@ -1,3 +1,14 @@
 spring:
   application:
     name: IncludIA-Java
+  rabbitmq:
+    host: localhost
+
+mq:
+  queue:
+    match: "match-queue"
+
+jwt:
+  secret: "SUA_CHAVE_SECRETA_MUITO_LONGA_E_SEGURA_AQUI_MINIMO_32_BYTES"
+  expiration:
+    hours: 24

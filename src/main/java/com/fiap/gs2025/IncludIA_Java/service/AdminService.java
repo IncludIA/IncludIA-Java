@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,6 +29,17 @@ public class AdminService {
 
     @Autowired
     private IdiomaRepository idiomaRepository;
+
+    @Cacheable("skills")
+    public Page<SkillResponse> getAllSkills(Pageable pageable) {
+        return skillRepository.findAll(pageable).map(SkillResponse::new);
+    }
+
+    @Cacheable("idiomas")
+    public Page<IdiomaResponse> getAllIdiomas(Pageable pageable) {
+        return idiomaRepository.findAll(pageable).map(IdiomaResponse::new);
+    }
+
 
     @Transactional
     @CacheEvict(value = "skills", allEntries = true)

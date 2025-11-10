@@ -46,6 +46,18 @@ public class CandidateProfileService {
     }
 
     @Transactional
+    public CandidateProfileResponse updateProfileSummary(String newSummary) {
+        Candidate candidate = getCurrentAuthenticatedCandidate();
+        candidate.setResumoPerfil(newSummary);
+
+        // Fallback temporário sem IA
+        candidate.setResumoInclusivoIA(newSummary);
+
+        Candidate savedCandidate = candidateRepository.save(candidate);
+        return new CandidateProfileResponse(savedCandidate);
+    }
+
+    @Transactional
     public ExperienceResponse addExperience(ExperienceRequest request) {
         Candidate candidate = getCurrentAuthenticatedCandidate();
         Empresa empresa = null;

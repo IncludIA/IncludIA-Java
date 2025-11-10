@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +35,18 @@ public class ChatService {
         if (!isCandidate && !isRecruiter) {
             throw new UnauthorizedAccessException("Usuário não pertence a este chat");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ChatMessageResponse> getMessagesForChat(UUID chatId, Pageable pageable) {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chat não encontrado"));
+
+        checkUserChatAccess(chat, userDetails.getId());
+
+        return chatMessageRepository.findByChatOrderByTimestampDesc(chat, pageable)
+                .map(ChatMessageResponse::new);
     }
 
     @Transactional(readOnly = true)

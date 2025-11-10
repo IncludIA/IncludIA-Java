@@ -35,6 +35,15 @@ public class InteractionService {
     @Autowired
     private NotificationService notificationService;
 
+    private Match createNewMatch(Candidate candidate, JobVaga vaga) {
+        Match match = new Match();
+        match.setId(UUID.randomUUID());
+        match.setCandidate(candidate);
+        match.setVaga(vaga);
+        match.setStatus(MatchStatus.PENDENTE);
+        return match;
+    }
+
     @Transactional
     public MatchResponse candidateSwipe(MatchActionRequest request) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -45,7 +54,7 @@ public class InteractionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Vaga não encontrada"));
 
         Match match = matchRepository.findByCandidateAndVaga(candidate, vaga)
-                .orElse(new Match(UUID.randomUUID(), candidate, vaga));
+                .orElseGet(() -> createNewMatch(candidate, vaga));
 
         match.setLikedByCandidate(request.isLiked());
         match.updateStatus();
@@ -75,7 +84,7 @@ public class InteractionService {
         }
 
         Match match = matchRepository.findByCandidateAndVaga(candidate, vaga)
-                .orElse(new Match(UUID.randomUUID(), candidate, vaga));
+                .orElseGet(() -> createNewMatch(candidate, vaga));
 
         match.setLikedByRecruiter(request.isLiked());
         match.updateStatus();
