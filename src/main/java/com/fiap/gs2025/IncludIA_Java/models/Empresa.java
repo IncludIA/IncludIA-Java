@@ -33,14 +33,12 @@ public class Empresa {
     @Column(length = 4000)
     private String cultura;
 
-    private String fotoCapaUrl; //
+    private String fotoCapaUrl;
 
-    // Relações
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     private Set<Recruiter> recruiters = new HashSet<>();
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     private Set<JobVaga> vagas = new HashSet<>();
-
 
 }

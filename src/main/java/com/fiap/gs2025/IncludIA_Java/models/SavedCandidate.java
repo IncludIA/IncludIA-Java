@@ -10,8 +10,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "profile_views")
-public class ProfileView {
+@Table(name = "saved_candidates", uniqueConstraints = @UniqueConstraint(columnNames = {"recruiter_id", "candidate_id"})) // Evita salvar o mesmo candidato duas vezes pelo mesmo recrutador
+public class SavedCandidate {
 
     @Id
     private UUID id;
@@ -25,6 +25,5 @@ public class ProfileView {
     private Candidate candidate;
 
     @Column(nullable = false)
-    private Instant viewedAt;
-
+    private Instant savedAt;
 }
