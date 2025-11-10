@@ -10,9 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Getter
 @NoArgsConstructor
-@Entity
 @Table(name = "candidates")
 public class Candidate {
 
@@ -68,4 +66,139 @@ public class Candidate {
     @OneToMany(mappedBy = "candidate")
     private Set<Notification> notificacoes = new HashSet<>();
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenhaHash() {
+        return senhaHash;
+    }
+
+    public void setSenhaHash(String senhaHash) {
+        this.senhaHash = senhaHash;
+    }
+
+    public String getResumoPerfil() {
+        return resumoPerfil;
+    }
+
+    public void setResumoPerfil(String resumoPerfil) {
+        this.resumoPerfil = resumoPerfil;
+    }
+
+    public String getResumoInclusivoIA() {
+        return resumoInclusivoIA;
+    }
+
+    public void setResumoInclusivoIA(String resumoInclusivoIA) {
+        this.resumoInclusivoIA = resumoInclusivoIA;
+    }
+
+    public String getFotoPerfilUrl() {
+        return fotoPerfilUrl;
+    }
+
+    public void setFotoPerfilUrl(String fotoPerfilUrl) {
+        this.fotoPerfilUrl = fotoPerfilUrl;
+    }
+
+    public boolean isAtive() {
+        return isAtive;
+    }
+
+    public void setAtive(boolean ative) {
+        isAtive = ative;
+    }
+
+    public Set<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public Set<Experience> getExperiencias() {
+        return experiencias;
+    }
+
+    public void setExperiencias(Set<Experience> experiencias) {
+        this.experiencias = experiencias;
+    }
+
+    public Set<Education> getFormacoes() {
+        return formacoes;
+    }
+
+    public void setFormacoes(Set<Education> formacoes) {
+        this.formacoes = formacoes;
+    }
+
+    public Set<Voluntariado> getVoluntariados() {
+        return voluntariados;
+    }
+
+    public void setVoluntariados(Set<Voluntariado> voluntariados) {
+        this.voluntariados = voluntariados;
+    }
+
+    public Set<CandidateIdioma> getIdiomas() {
+        return idiomas;
+    }
+
+    public void setIdiomas(Set<CandidateIdioma> idiomas) {
+        this.idiomas = idiomas;
+    }
+
+    public Set<Match> getMatches() {
+        return matches;
+    }
+
+    public void setMatches(Set<Match> matches) {
+        this.matches = matches;
+    }
+
+    public Set<SavedJob> getVagasSalvas() {
+        return vagasSalvas;
+    }
+
+    public void setVagasSalvas(Set<SavedJob> vagasSalvas) {
+        this.vagasSalvas = vagasSalvas;
+    }
+
+    public Set<ProfileView> getViewsNoPerfil() {
+        return viewsNoPerfil;
+    }
+
+    public void setViewsNoPerfil(Set<ProfileView> viewsNoPerfil) {
+        this.viewsNoPerfil = viewsNoPerfil;
+    }
+
+    public Set<Notification> getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setNotificacoes(Set<Notification> notificacoes) {
+        this.notificacoes = notificacoes;
+    }
 }

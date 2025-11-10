@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.UUID;
 
-@Getter
 @NoArgsConstructor
-@Entity
 @Table(name = "chat_messages")
 public class ChatMessage {
 
@@ -34,6 +32,59 @@ public class ChatMessage {
 
     private boolean isRead;
 
+    public UUID getId() {
+        return id;
+    }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public String getConteudo() {
+        return conteudo;
+    }
+
+    public void setConteudo(String conteudo) {
+        this.conteudo = conteudo;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public UUID getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(UUID senderId) {
+        this.senderId = senderId;
+    }
+
+    public UUID getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(UUID receiverId) {
+        this.receiverId = receiverId;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
 }

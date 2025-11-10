@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Getter
 @NoArgsConstructor
-@Entity
 @Table(name = "matches", uniqueConstraints = @UniqueConstraint(columnNames = {"candidate_id", "job_vaga_id"}))
 public class Match {
 
@@ -43,5 +41,61 @@ public class Match {
         } else if (!isLikedByRecruiter) {
             this.status = MatchStatus.REJEITADO_RECRUTADOR;
         }
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Candidate getCandidate() {
+        return candidate;
+    }
+
+    public void setCandidate(Candidate candidate) {
+        this.candidate = candidate;
+    }
+
+    public JobVaga getVaga() {
+        return vaga;
+    }
+
+    public void setVaga(JobVaga vaga) {
+        this.vaga = vaga;
+    }
+
+    public BigDecimal getMatchScore() {
+        return matchScore;
+    }
+
+    public void setMatchScore(BigDecimal matchScore) {
+        this.matchScore = matchScore;
+    }
+
+    public MatchStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MatchStatus status) {
+        this.status = status;
+    }
+
+    public boolean isLikedByCandidate() {
+        return isLikedByCandidate;
+    }
+
+    public void setLikedByCandidate(boolean likedByCandidate) {
+        isLikedByCandidate = likedByCandidate;
+    }
+
+    public boolean isLikedByRecruiter() {
+        return isLikedByRecruiter;
+    }
+
+    public void setLikedByRecruiter(boolean likedByRecruiter) {
+        isLikedByRecruiter = likedByRecruiter;
     }
 }

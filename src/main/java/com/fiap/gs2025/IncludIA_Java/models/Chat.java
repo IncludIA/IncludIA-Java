@@ -9,9 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Getter
+
 @NoArgsConstructor
-@Entity
 @Table(name = "chats")
 public class Chat {
 
@@ -29,14 +28,35 @@ public class Chat {
     private Set<ChatMessage> messages = new HashSet<>();
 
 
-    private Chat(UUID id, Match match, Instant createdAt) {
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
         this.match = match;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    // Método Factory: Um chat é criado quando um Match é confirmado
-    public static Chat create(Match match) {
-        return new Chat(UUID.randomUUID(), match, Instant.now());
+    public Set<ChatMessage> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<ChatMessage> messages) {
+        this.messages = messages;
     }
 }

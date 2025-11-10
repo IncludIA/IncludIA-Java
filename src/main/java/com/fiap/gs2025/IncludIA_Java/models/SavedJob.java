@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.UUID;
 
-@Getter
 @NoArgsConstructor
-@Entity
 @Table(name = "saved_jobs", uniqueConstraints = @UniqueConstraint(columnNames = {"candidate_id", "job_vaga_id"}))
 public class SavedJob {
 
@@ -27,4 +25,35 @@ public class SavedJob {
     @Column(nullable = false)
     private Instant savedAt;
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Candidate getCandidate() {
+        return candidate;
+    }
+
+    public void setCandidate(Candidate candidate) {
+        this.candidate = candidate;
+    }
+
+    public JobVaga getVaga() {
+        return vaga;
+    }
+
+    public void setVaga(JobVaga vaga) {
+        this.vaga = vaga;
+    }
+
+    public Instant getSavedAt() {
+        return savedAt;
+    }
+
+    public void setSavedAt(Instant savedAt) {
+        this.savedAt = savedAt;
+    }
 }
