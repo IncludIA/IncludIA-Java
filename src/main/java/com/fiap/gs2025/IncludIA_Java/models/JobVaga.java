@@ -1,6 +1,7 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
-import com.fiap.gs2025.IncludIA_Java.enums.JobType;
+import com.fiap.gs2025.IncludIA_Java.enums.ModeloTrabalho;
+import com.fiap.gs2025.IncludIA_Java.enums.TipoContrato;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,11 @@ public class JobVaga {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private JobType tipoVaga;
+    private TipoContrato tipoVaga;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ModeloTrabalho modeloTrabalho;
 
     private BigDecimal salarioMin;
 

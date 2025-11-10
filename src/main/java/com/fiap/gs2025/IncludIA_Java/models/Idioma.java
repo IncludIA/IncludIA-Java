@@ -1,5 +1,6 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fiap.gs2025.IncludIA_Java.enums.NomeIdioma;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,18 +19,9 @@ public class Idioma {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String nome;
+    private NomeIdioma nome;
 
     @OneToMany(mappedBy = "idioma")
     private Set<CandidateIdioma> candidateIdiomas = new HashSet<>();
 
-
-    private Idioma(UUID id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
-    public static Idioma create(String nome) {
-        return new Idioma(UUID.randomUUID(), nome);
-    }
 }

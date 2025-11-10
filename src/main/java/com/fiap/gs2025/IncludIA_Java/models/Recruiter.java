@@ -26,6 +26,11 @@ public class Recruiter {
     @Column(nullable = false)
     private String senhaHash;
 
+    private boolean isAtive;
+
+    private String fotoPerfilUrl;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)
     private Empresa empresa;

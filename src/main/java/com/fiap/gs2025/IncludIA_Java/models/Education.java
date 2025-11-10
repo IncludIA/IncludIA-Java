@@ -1,5 +1,6 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fiap.gs2025.IncludIA_Java.enums.GrauEducacao;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class Education {
     private String nomeInstituicao;
 
     @Column(nullable = false)
-    private String grau;
+    private GrauEducacao grau;
 
     private String areaEstudo;
 

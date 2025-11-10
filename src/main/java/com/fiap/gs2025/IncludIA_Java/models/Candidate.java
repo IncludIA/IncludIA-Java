@@ -37,6 +37,9 @@ public class Candidate {
 
     private String fotoPerfilUrl;
 
+    private boolean isAtive;
+
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "candidate_skills")
     private Set<Skill> skills = new HashSet<>();
