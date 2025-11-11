@@ -16,28 +16,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class NotificationService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
     @Autowired
     private NotificationRepository notificationRepository;
-
     @Autowired
     private ChatRepository chatRepository;
-
     @Autowired
     private CandidateRepository candidateRepository;
-
     @Autowired
     private RecruiterRepository recruiterRepository;
-
     @Autowired
     private MatchRepository matchRepository;
 
@@ -92,24 +85,6 @@ public class NotificationService {
 
         notificationRepository.save(notification);
     }
-
-    @Transactional(readOnly = true)
-    public List<NotificationResponse> getUnreadNotificationsForUser(UUID userId, String role) {
-        if ("ROLE_CANDIDATE".equals(role)) {
-            Candidate candidate = candidateRepository.findById(userId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Candidato não encontrado"));
-            return notificationRepository.findByCandidateAndIsReadFalse(candidate).stream()
-                    .map(NotificationResponse::new)
-                    .collect(Collectors.toList());
-        } else {
-            Recruiter recruiter = recruiterRepository.findById(userId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Recrutador não encontrado"));
-            return notificationRepository.findByRecruiterAndIsReadFalse(recruiter).stream()
-                    .map(NotificationResponse::new)
-                    .collect(Collectors.toList());
-        }
-    }
-
 
     @Transactional(readOnly = true)
     public Page<NotificationResponse> getUnreadNotificationsForUser(Pageable pageable) {

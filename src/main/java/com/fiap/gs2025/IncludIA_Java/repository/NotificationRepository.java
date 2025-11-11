@@ -8,9 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, UUID> {
     List<Notification> findByCandidateAndIsReadFalse(Candidate candidate);
     List<Notification> findByRecruiterAndIsReadFalse(Recruiter recruiter);
+
+    Page<Notification> findByCandidateAndIsReadFalseOrderByCreatedAtDesc(Candidate candidate, Pageable pageable);
+    Page<Notification> findByRecruiterAndIsReadFalseOrderByCreatedAtDesc(Recruiter recruiter, Pageable pageable);
 }

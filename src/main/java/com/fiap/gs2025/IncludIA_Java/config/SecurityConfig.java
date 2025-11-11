@@ -31,23 +31,24 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register-candidate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register-recruiter").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/empresas").permitAll() // Permitir cadastro de empresa
+                        .requestMatchers(HttpMethod.POST, "/empresas").permitAll()
                         .requestMatchers(HttpMethod.GET, "/skills").permitAll()
                         .requestMatchers(HttpMethod.GET, "/idiomas").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
 
-                        // Rotas de Admin (Exemplo de como proteger)
-                        .requestMatchers(HttpMethod.POST, "/admin/**").hasRole("RECRUITER") // Apenas como exemplo
+                        .requestMatchers(HttpMethod.POST, "/admin/**").hasRole("RECRUITER")
 
-                        // Rotas de Candidato
                         .requestMatchers("/profile/**").hasRole("CANDIDATE")
                         .requestMatchers("/save/job").hasRole("CANDIDATE")
                         .requestMatchers("/swipe/candidate").hasRole("CANDIDATE")
+                        .requestMatchers("/matches/my-matches").hasRole("CANDIDATE")
+                        .requestMatchers("/view/my-profile-views").hasRole("CANDIDATE")
 
-                        // Rotas de Recrutador
                         .requestMatchers("/vagas/**").hasRole("RECRUITER")
                         .requestMatchers("/save/candidate").hasRole("RECRUITER")
                         .requestMatchers("/swipe/recruiter/**").hasRole("RECRUITER")
                         .requestMatchers("/view/profile/**").hasRole("RECRUITER")
+                        .requestMatchers("/recruiter-profile/me").hasRole("RECRUITER")
 
                         .anyRequest().authenticated()
                 )

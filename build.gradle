@@ -25,17 +25,15 @@ repositories {
 }
 
 dependencies {
-    // --- Segurança & Autenticação ---
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
-
-    // --- Mensageria (Opcional, se for usar RabbitMQ) ---
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.amqp:spring-rabbit-stream'
-
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

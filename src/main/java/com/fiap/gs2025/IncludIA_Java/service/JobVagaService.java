@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,10 +54,7 @@ public class JobVagaService {
         vaga.setId(UUID.randomUUID());
         vaga.setTitulo(request.titulo());
         vaga.setDescricaoOriginal(request.descricaoOriginal());
-
-        // Fallback temporário sem IA
-        vaga.setDescricaoInclusiva(request.descricaoOriginal());
-
+        vaga.setDescricaoInclusiva(request.descricaoOriginal()); // Fallback sem IA
         vaga.setLocalizacao(request.localizacao());
         vaga.setTipoVaga(request.tipoVaga());
         vaga.setModeloTrabalho(request.modeloTrabalho());
@@ -84,22 +80,6 @@ public class JobVagaService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobVagaResponse> getVagasByAuthenticatedRecruiter() {
-        Recruiter recruiter = getCurrentAuthenticatedRecruiter();
-        return jobVagaRepository.findByRecruiter(recruiter).stream()
-                .map(JobVagaResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<JobVagaResponse> getAllActiveVagas() {
-        return jobVagaRepository.findAll().stream()
-                .filter(JobVaga::isAtiva)
-                .map(JobVagaResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
     public Page<JobVagaResponse> getVagasByAuthenticatedRecruiter(Pageable pageable) {
         Recruiter recruiter = getCurrentAuthenticatedRecruiter();
         return jobVagaRepository.findByRecruiter(recruiter, pageable).map(JobVagaResponse::new);
@@ -109,7 +89,6 @@ public class JobVagaService {
     public Page<JobVagaResponse> getAllActiveVagas(Pageable pageable) {
         return jobVagaRepository.findByIsAtivaTrue(pageable).map(JobVagaResponse::new);
     }
-
 
     @Transactional
     public JobVagaResponse updateVaga(UUID vagaId, JobVagaRequest request) {
@@ -123,8 +102,9 @@ public class JobVagaService {
 
         vaga.setTitulo(request.titulo());
         vaga.setDescricaoOriginal(request.descricaoOriginal());
-        vaga.setDescricaoInclusiva(request.descricaoOriginal());
+        vaga.setDescricaoInclusiva(request.descricaoOriginal()); // Fallback sem IA
         vaga.setLocalizacao(request.localizacao());
+        // ... (outros setters para atualizar)
 
         JobVaga savedVaga = jobVagaRepository.save(vaga);
         return new JobVagaResponse(savedVaga);

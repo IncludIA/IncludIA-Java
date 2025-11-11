@@ -17,9 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -29,17 +27,6 @@ public class AdminService {
 
     @Autowired
     private IdiomaRepository idiomaRepository;
-
-    @Cacheable("skills")
-    public Page<SkillResponse> getAllSkills(Pageable pageable) {
-        return skillRepository.findAll(pageable).map(SkillResponse::new);
-    }
-
-    @Cacheable("idiomas")
-    public Page<IdiomaResponse> getAllIdiomas(Pageable pageable) {
-        return idiomaRepository.findAll(pageable).map(IdiomaResponse::new);
-    }
-
 
     @Transactional
     @CacheEvict(value = "skills", allEntries = true)
@@ -57,10 +44,8 @@ public class AdminService {
     }
 
     @Cacheable("skills")
-    public List<SkillResponse> getAllSkills() {
-        return skillRepository.findAll().stream()
-                .map(SkillResponse::new)
-                .collect(Collectors.toList());
+    public Page<SkillResponse> getAllSkills(Pageable pageable) {
+        return skillRepository.findAll(pageable).map(SkillResponse::new);
     }
 
     @Transactional
@@ -78,9 +63,7 @@ public class AdminService {
     }
 
     @Cacheable("idiomas")
-    public List<IdiomaResponse> getAllIdiomas() {
-        return idiomaRepository.findAll().stream()
-                .map(IdiomaResponse::new)
-                .collect(Collectors.toList());
+    public Page<IdiomaResponse> getAllIdiomas(Pageable pageable) {
+        return idiomaRepository.findAll(pageable).map(IdiomaResponse::new);
     }
 }

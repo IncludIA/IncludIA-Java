@@ -31,6 +31,7 @@ public class ChatController {
     public ResponseEntity<ChatMessageResponse> sendMessage(
             @PathVariable UUID chatId,
             @Valid @RequestBody ChatMessageRequest request) {
+        // O ChatService agora pega o senderId do SecurityContext E envia via WebSocket
         return ResponseEntity.status(201).body(chatService.sendMessage(chatId, request));
     }
 }
