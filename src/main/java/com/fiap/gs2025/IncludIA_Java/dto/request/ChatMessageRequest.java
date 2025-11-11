@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public record ChatMessageRequest(
-        @NotBlank
+        @NotBlank(message = "{chat.content.notblank}")
         @Size(max = 2000)
         String conteudo,
 
-        @NotNull
+        @NotNull(message = "{chat.receiver.notnull}")
         UUID receiverId
 ) {}

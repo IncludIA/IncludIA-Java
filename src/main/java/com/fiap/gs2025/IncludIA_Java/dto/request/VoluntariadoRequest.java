@@ -6,15 +6,15 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record VoluntariadoRequest(
-        @NotBlank(message = "Organização é obrigatória")
+        @NotBlank(message = "{organizacao.notblank}")
         String organizacao,
 
-        @NotBlank(message = "Função é obrigatória")
+        @NotBlank(message = "{funcao.notblank}")
         String funcao,
 
         String descricao,
 
-        @NotNull(message = "Data de início é obrigatória")
+        @NotNull(message = "{data.inicio.notnull}")
         LocalDate dataInicio,
 
         LocalDate dataFim

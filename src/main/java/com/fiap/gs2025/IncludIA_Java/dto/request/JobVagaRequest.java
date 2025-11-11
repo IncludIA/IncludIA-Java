@@ -11,19 +11,19 @@ import java.util.Set;
 import java.util.UUID;
 
 public record JobVagaRequest(
-        @NotBlank(message = "Título é obrigatório")
+        @NotBlank(message = "{titulo.notblank}")
         String titulo,
 
-        @NotBlank(message = "Descrição é obrigatória")
+        @NotBlank(message = "{descricao.notblank}")
         @Size(max = 5000)
         String descricaoOriginal,
 
         String localizacao,
 
-        @NotNull(message = "Tipo de vaga é obrigatório")
+        @NotNull(message = "{tipo.vaga.notnull}")
         TipoContrato tipoVaga,
 
-        @NotNull(message = "Modelo de trabalho é obrigatório")
+        @NotNull(message = "{modelo.trabalho.notnull}")
         ModeloTrabalho modeloTrabalho,
 
         BigDecimal salarioMin,

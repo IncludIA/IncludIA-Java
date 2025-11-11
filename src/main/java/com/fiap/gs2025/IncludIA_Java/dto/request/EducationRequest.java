@@ -7,15 +7,15 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record EducationRequest(
-        @NotBlank(message = "Nome da instituição é obrigatório")
+        @NotBlank(message = "{nome.instituicao.notblank}")
         String nomeInstituicao,
 
-        @NotNull(message = "Grau de educação é obrigatório")
+        @NotNull(message = "{grau.educacao.notnull}")
         GrauEducacao grau,
 
         String areaEstudo,
 
-        @NotNull(message = "Data de início é obrigatória")
+        @NotNull(message = "{data.inicio.notnull}")
         LocalDate dataInicio,
 
         LocalDate dataFim,

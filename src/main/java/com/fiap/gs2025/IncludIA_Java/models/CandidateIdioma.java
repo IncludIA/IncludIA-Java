@@ -1,26 +1,22 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fiap.gs2025.IncludIA_Java.enums.ProficiencyLevel;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
-
-@NoArgsConstructor
-@Table(name = "candidate_idiomas",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"candidate_id", "idioma_id"})) //
+@Entity
+@Table(name = "candidate_idiomas", uniqueConstraints = @UniqueConstraint(columnNames = {"candidate_id", "idioma_id"}))
 public class CandidateIdioma {
-
     @Id
     private UUID id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", nullable = false)
     private Candidate candidate;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idioma_id", nullable = false)
     private Idioma idioma;
@@ -37,27 +33,27 @@ public class CandidateIdioma {
         this.id = id;
     }
 
-    public void setIdioma(Idioma idioma) {
-        this.idioma = idioma;
-    }
-
-    public Idioma getIdioma() {
-        return idioma;
-    }
-
-    public void setNivelProficiencia(@NotNull(message = "Nível de proficiência é obrigatório") ProficiencyLevel nivelProficiencia) {
-        this.nivelProficiencia = nivelProficiencia;
-    }
-
-    public @NotNull(message = "Nível de proficiência é obrigatório") ProficiencyLevel getNivelProficiencia() {
-        return nivelProficiencia;
+    public Candidate getCandidate() {
+        return candidate;
     }
 
     public void setCandidate(Candidate candidate) {
         this.candidate = candidate;
     }
 
-    public Candidate getCandidate() {
-        return candidate;
+    public Idioma getIdioma() {
+        return idioma;
+    }
+
+    public void setIdioma(Idioma idioma) {
+        this.idioma = idioma;
+    }
+
+    public ProficiencyLevel getNivelProficiencia() {
+        return nivelProficiencia;
+    }
+
+    public void setNivelProficiencia(ProficiencyLevel nivelProficiencia) {
+        this.nivelProficiencia = nivelProficiencia;
     }
 }

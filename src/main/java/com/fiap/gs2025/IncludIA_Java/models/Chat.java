@@ -1,19 +1,15 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-
-@NoArgsConstructor
+@Entity
 @Table(name = "chats")
 public class Chat {
-
     @Id
     private UUID id;
 
@@ -24,9 +20,9 @@ public class Chat {
     @Column(nullable = false)
     private Instant createdAt;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ChatMessage> messages = new HashSet<>();
-
 
     public UUID getId() {
         return id;

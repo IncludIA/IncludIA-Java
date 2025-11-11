@@ -1,19 +1,17 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference; // IMPORT
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.Instant;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "chat_messages")
 public class ChatMessage {
-
     @Id
     private UUID id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id", nullable = false)
     private Chat chat;

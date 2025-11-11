@@ -1,17 +1,15 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "recruiters")
 public class Recruiter {
-
     @Id
     private UUID id;
 
@@ -28,20 +26,24 @@ public class Recruiter {
 
     private String fotoPerfilUrl;
 
-
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)
     private Empresa empresa;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "recruiter")
     private Set<JobVaga> vagasPostadas = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "recruiter")
     private Set<SavedCandidate> candidatosSalvos = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "recruiter")
     private Set<ProfileView> viewsEmCandidatos = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "recruiter")
     private Set<Notification> notificacoes = new HashSet<>();
 

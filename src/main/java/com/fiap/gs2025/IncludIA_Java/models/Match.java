@@ -1,24 +1,23 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fiap.gs2025.IncludIA_Java.enums.MatchStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "matches", uniqueConstraints = @UniqueConstraint(columnNames = {"candidate_id", "job_vaga_id"}))
 public class Match {
-
     @Id
     private UUID id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", nullable = false)
     private Candidate candidate;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_vaga_id", nullable = false)
     private JobVaga vaga;

@@ -5,15 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CandidateRegistrationRequest(
-        @NotBlank(message = "Nome é obrigatório")
+        @NotBlank(message = "{nome.notblank}")
         String nome,
 
-        @NotBlank(message = "Email é obrigatório")
-        @Email(message = "Email inválido")
+        @NotBlank(message = "{email.notblank}")
+        @Email(message = "{field.email}")
         String email,
 
-        @NotBlank(message = "Senha é obrigatória")
-        @Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
+        @NotBlank(message = "{senha.notblank}")
+        @Size(min = 8, message = "{field.size.password}")
         String senha,
 
         String resumoPerfil

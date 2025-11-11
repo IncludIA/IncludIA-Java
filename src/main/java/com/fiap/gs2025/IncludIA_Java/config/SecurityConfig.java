@@ -36,6 +36,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/idiomas").permitAll()
                         .requestMatchers("/ws/**").permitAll()
 
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/admin/**").hasRole("RECRUITER")
 
                         .requestMatchers("/profile/**").hasRole("CANDIDATE")
@@ -49,10 +54,14 @@ public class SecurityConfig {
                         .requestMatchers("/swipe/recruiter/**").hasRole("RECRUITER")
                         .requestMatchers("/view/profile/**").hasRole("RECRUITER")
                         .requestMatchers("/recruiter-profile/me").hasRole("RECRUITER")
+                        .requestMatchers("/matches/my-matches").hasRole("RECRUITER")
 
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
+
                 .build();
     }
 

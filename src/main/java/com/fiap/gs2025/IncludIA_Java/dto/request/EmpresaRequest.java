@@ -5,13 +5,13 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record EmpresaRequest(
-        @NotBlank(message = "Nome Oficial é obrigatório")
+        @NotBlank(message = "{nome.notblank}")
         String nomeOficial,
 
         String nomeFantasia,
 
-        @NotBlank(message = "CNPJ é obrigatório")
-        @Pattern(regexp = "\\d{14}", message = "CNPJ deve conter 14 dígitos numéricos")
+        @NotBlank(message = "{cnpj.notblank}")
+        @Pattern(regexp = "\\d{14}", message = "{cnpj.pattern}")
         String cnpj,
 
         String localizacao,

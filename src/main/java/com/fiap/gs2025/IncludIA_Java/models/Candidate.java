@@ -1,16 +1,13 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Getter;
-import lombok.NoArgsConstructor; // (Para o JPA)
-import lombok.Setter;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "candidates")
 public class Candidate {
 
@@ -27,7 +24,7 @@ public class Candidate {
     @Column(nullable = false)
     private String senhaHash;
 
-    @Column(length = 2000) // Definindo um tamanho maior para resumos
+    @Column(length = 2000)
     private String resumoPerfil;
 
     @Column(length = 2000)
@@ -37,32 +34,39 @@ public class Candidate {
 
     private boolean isAtive;
 
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "candidate_skills")
     private Set<Skill> skills = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Experience> experiencias = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Education> formacoes = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Voluntariado> voluntariados = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CandidateIdioma> idiomas = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate")
     private Set<Match> matches = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate")
     private Set<SavedJob> vagasSalvas = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate")
     private Set<ProfileView> viewsNoPerfil = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "candidate")
     private Set<Notification> notificacoes = new HashSet<>();
 

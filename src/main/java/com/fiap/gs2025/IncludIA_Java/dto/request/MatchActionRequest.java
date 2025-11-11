@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record MatchActionRequest(
-        @NotNull(message = "ID do alvo (vaga ou candidato) é obrigatório")
+        @NotNull(message = "{target.id.notnull}")
         UUID targetId,
 
-        @NotNull(message = "Ação 'isLiked' é obrigatória")
+        @NotNull(message = "{action.liked.notnull}")
         Boolean isLiked
 ) {}

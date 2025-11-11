@@ -5,9 +5,9 @@ import com.fiap.gs2025.IncludIA_Java.enums.ProficiencyLevel;
 import jakarta.validation.constraints.NotNull;
 
 public record CandidateIdiomaRequest(
-        @NotNull(message = "Nome do idioma é obrigatório")
+        @NotNull(message = "{idioma.notnull}")
         NomeIdioma nomeIdioma,
 
-        @NotNull(message = "Nível de proficiência é obrigatório")
+        @NotNull(message = "{proficiencia.notnull}")
         ProficiencyLevel nivelProficiencia
 ) {}

@@ -4,9 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
 
 public record RecruiterProfileRequest(
-        @NotBlank(message = "Nome é obrigatório")
+        @NotBlank(message = "{nome.notblank}")
         String nome,
 
-        @URL(message = "URL da foto de perfil inválida")
+        @URL(message = "{field.url}")
         String fotoPerfilUrl
 ) {}

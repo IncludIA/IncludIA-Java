@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record SkillRequest(
-        @NotBlank(message = "Nome é obrigatório")
+        @NotBlank(message = "{nome.notblank}")
         String nome,
 
-        @NotNull(message = "Tipo de skill é obrigatório")
+        @NotNull(message = "{field.notnull}")
         SkillType tipoSkill
 ) {}

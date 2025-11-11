@@ -29,7 +29,7 @@ public class ChatService {
     private ChatMessageRepository chatMessageRepository;
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate; 
+    private SimpMessagingTemplate messagingTemplate; // Injetado para o WebSocket
 
     private void checkUserChatAccess(Chat chat, UUID userId) {
         boolean isCandidate = chat.getMatch().getCandidate().getId().equals(userId);

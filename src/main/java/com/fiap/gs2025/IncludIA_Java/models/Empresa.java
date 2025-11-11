@@ -1,17 +1,14 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "empresas")
 public class Empresa {
-
     @Id
     private UUID id;
 
@@ -33,9 +30,11 @@ public class Empresa {
 
     private String fotoCapaUrl;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     private Set<Recruiter> recruiters = new HashSet<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     private Set<JobVaga> vagas = new HashSet<>();
 

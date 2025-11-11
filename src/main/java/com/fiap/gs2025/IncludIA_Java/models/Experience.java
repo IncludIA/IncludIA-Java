@@ -1,16 +1,14 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fiap.gs2025.IncludIA_Java.enums.TipoContrato;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "experiences")
 public class Experience {
-
     @Id
     private UUID id;
 
@@ -18,7 +16,7 @@ public class Experience {
     private String tituloCargo;
 
     @Column(nullable = false)
-    private String tipoEmprego;
+    private TipoContrato tipoEmprego;
 
     @Column(nullable = false)
     private LocalDate dataInicio;
@@ -28,6 +26,7 @@ public class Experience {
     @Column(length = 2000)
     private String descricao;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", nullable = false)
     private Candidate candidate;
@@ -52,11 +51,11 @@ public class Experience {
         this.tituloCargo = tituloCargo;
     }
 
-    public String getTipoEmprego() {
+    public TipoContrato getTipoEmprego() {
         return tipoEmprego;
     }
 
-    public void setTipoEmprego(String tipoEmprego) {
+    public void setTipoEmprego(TipoContrato tipoEmprego) {
         this.tipoEmprego = tipoEmprego;
     }
 

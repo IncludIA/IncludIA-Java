@@ -1,24 +1,23 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fiap.gs2025.IncludIA_Java.enums.NotificationType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.Instant;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "notifications")
 public class Notification {
-
     @Id
     private UUID id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruiter_id", nullable = true)
     private Recruiter recruiter;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", nullable = true)
     private Candidate candidate;

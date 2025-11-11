@@ -1,16 +1,13 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "voluntariados")
 public class Voluntariado {
-
     @Id
     private UUID id;
 
@@ -28,6 +25,7 @@ public class Voluntariado {
 
     private LocalDate dataFim;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id", nullable = false)
     private Candidate candidate;

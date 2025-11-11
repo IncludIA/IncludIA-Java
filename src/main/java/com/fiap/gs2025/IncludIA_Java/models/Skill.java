@@ -2,17 +2,13 @@ package com.fiap.gs2025.IncludIA_Java.models;
 
 import com.fiap.gs2025.IncludIA_Java.enums.SkillType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@NoArgsConstructor
+@Entity
 @Table(name = "skills")
 public class Skill {
-
     @Id
     private UUID id;
 

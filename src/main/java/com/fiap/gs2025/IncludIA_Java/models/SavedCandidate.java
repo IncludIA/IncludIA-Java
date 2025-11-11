@@ -1,19 +1,17 @@
 package com.fiap.gs2025.IncludIA_Java.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.Instant;
 import java.util.UUID;
 
-@NoArgsConstructor
-@Table(name = "saved_candidates", uniqueConstraints = @UniqueConstraint(columnNames = {"recruiter_id", "candidate_id"})) // Evita salvar o mesmo candidato duas vezes pelo mesmo recrutador
+@Entity
+@Table(name = "saved_candidates", uniqueConstraints = @UniqueConstraint(columnNames = {"recruiter_id", "candidate_id"}))
 public class SavedCandidate {
-
     @Id
     private UUID id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruiter_id", nullable = false)
     private Recruiter recruiter;
