@@ -62,6 +62,8 @@ dependencies {
 
     // --- Banco de Dados ---
     implementation 'org.flywaydb:flyway-core'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.flywaydb:flyway-database-oracle'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'

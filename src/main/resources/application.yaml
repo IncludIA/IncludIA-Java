@@ -10,6 +10,13 @@ spring:
     username: sa
     password:
 
+  cache:
+    type: redis
+
+    data:
+      redis:
+        host: localhost
+        port: 6379
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
@@ -34,6 +41,6 @@ mq:
     match: "match-queue"
 
 jwt:
-  secret: "SUA_CHAVE_SECRETA_MUITO_LONGA_E_SEGURA_AQUI_MINIMO_32_BYTES"
+  secret: "794f595b47e4100cf65a897a5a4d3776fcc21eb92d4c9aeae1dd71c91ba3f5e62a3970a75a91044cebe9d8d4cec098f67eb4a07a6b8aa1a83ba7c5f01828e953c0e55f4a877b84589f24cec936654dbf"
   expiration:
     hours: 24

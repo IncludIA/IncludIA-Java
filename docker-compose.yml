@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+
+  # Serviço de Mensageria (para o NotificationService)
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: includia-rabbitmq
+    ports:
+      - "5672:5672"   # Porta da aplicação
+      - "15672:15672"  # Porta da Interface Web de Gestão
+    networks:
+      - includia-net
+
+  # Serviço de Cache (para o AdminService)
+  redis:
+    image: redis:alpine
+    container_name: includia-redis
+    ports:
+      - "6379:6379"   # Porta da aplicação
+    networks:
+      - includia-net
+
+networks:
+  includia-net:
+    driver: bridge
