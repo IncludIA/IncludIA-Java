@@ -29,13 +29,16 @@ configurations {
 
 repositories {
     mavenCentral()
-
     maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
     // --- Inteligência Artificial (Spring AI) ---
     implementation 'org.springframework.ai:spring-ai-google-gemini-starter'
+
+    // --- Cache (Redis) ---
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 
     // --- Segurança & Autenticação ---
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -62,8 +65,6 @@ dependencies {
 
     // --- Banco de Dados ---
     implementation 'org.flywaydb:flyway-core'
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.flywaydb:flyway-database-oracle'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
