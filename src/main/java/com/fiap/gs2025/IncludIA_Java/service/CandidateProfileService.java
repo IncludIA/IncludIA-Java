@@ -33,6 +33,9 @@ public class CandidateProfileService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
+    @Autowired
+    private AiService aiService;
+
     private Candidate getCurrentAuthenticatedCandidate() {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return candidateRepository.findById(userDetails.getId())
@@ -49,10 +52,15 @@ public class CandidateProfileService {
     public CandidateProfileResponse updateProfileSummary(String newSummary) {
         Candidate candidate = getCurrentAuthenticatedCandidate();
         candidate.setResumoPerfil(newSummary);
+        Candidate savedCandidate = candidateRepository.save(candidate);
+        return new CandidateProfileResponse(savedCandidate);
+    }
 
-        // Fallback temporário sem IA
-        candidate.setResumoInclusivoIA(newSummary);
-
+    @Transactional
+    public CandidateProfileResponse generateMyAIProfile() {
+        Candidate candidate = getCurrentAuthenticatedCandidate();
+        String resumoInclusivo = aiService.gerarResumoInclusivo(candidate);
+        candidate.setResumoInclusivoIA(resumoInclusivo);
         Candidate savedCandidate = candidateRepository.save(candidate);
         return new CandidateProfileResponse(savedCandidate);
     }

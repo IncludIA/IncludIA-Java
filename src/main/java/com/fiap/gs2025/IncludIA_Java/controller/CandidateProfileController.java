@@ -25,6 +25,11 @@ public class CandidateProfileController {
         return ResponseEntity.ok(profileService.getFullProfile());
     }
 
+    @PostMapping("/generate-ai-summary")
+    public ResponseEntity<CandidateProfileResponse> generateAiSummary() {
+        return ResponseEntity.ok(profileService.generateMyAIProfile());
+    }
+
     @PostMapping("/experience")
     public ResponseEntity<ExperienceResponse> addExperience(@Valid @RequestBody ExperienceRequest request) {
         return ResponseEntity.status(201).body(profileService.addExperience(request));

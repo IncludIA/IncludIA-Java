@@ -24,6 +24,11 @@ spring:
   rabbitmq:
     host: localhost
 
+  ai:
+    google:
+      gemini:
+        api-key: "AIzaSyBqqQ-9q6dyiCiuVpllnlume1YuyOMQoBA"
+
 mq:
   queue:
     match: "match-queue"

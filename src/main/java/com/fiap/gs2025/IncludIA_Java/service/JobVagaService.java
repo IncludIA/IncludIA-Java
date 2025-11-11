@@ -28,12 +28,13 @@ public class JobVagaService {
 
     @Autowired
     private JobVagaRepository jobVagaRepository;
-
     @Autowired
     private RecruiterRepository recruiterRepository;
-
     @Autowired
     private SkillRepository skillRepository;
+
+    @Autowired
+    private AiService aiService;
 
     private Recruiter getCurrentAuthenticatedRecruiter() {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -50,11 +51,13 @@ public class JobVagaService {
                         .orElseThrow(() -> new ResourceNotFoundException("Skill não encontrada: " + skillId)))
                 .collect(Collectors.toSet());
 
+        String descricaoInclusiva = aiService.gerarDescricaoInclusiva(request.descricaoOriginal());
+
         JobVaga vaga = new JobVaga();
         vaga.setId(UUID.randomUUID());
         vaga.setTitulo(request.titulo());
         vaga.setDescricaoOriginal(request.descricaoOriginal());
-        vaga.setDescricaoInclusiva(request.descricaoOriginal()); // Fallback sem IA
+        vaga.setDescricaoInclusiva(descricaoInclusiva);
         vaga.setLocalizacao(request.localizacao());
         vaga.setTipoVaga(request.tipoVaga());
         vaga.setModeloTrabalho(request.modeloTrabalho());
@@ -100,11 +103,12 @@ public class JobVagaService {
             throw new UnauthorizedAccessException("Você não tem permissão para editar esta vaga");
         }
 
+        String descricaoInclusiva = aiService.gerarDescricaoInclusiva(request.descricaoOriginal());
+
         vaga.setTitulo(request.titulo());
         vaga.setDescricaoOriginal(request.descricaoOriginal());
-        vaga.setDescricaoInclusiva(request.descricaoOriginal()); // Fallback sem IA
+        vaga.setDescricaoInclusiva(descricaoInclusiva);
         vaga.setLocalizacao(request.localizacao());
-        // ... (outros setters para atualizar)
 
         JobVaga savedVaga = jobVagaRepository.save(vaga);
         return new JobVagaResponse(savedVaga);

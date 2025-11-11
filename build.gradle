@@ -16,6 +16,7 @@ java {
 
 dependencyManagement {
     imports {
+        mavenBom "org.springframework.ai:spring-ai-bom:1.0.0-M1"
         mavenBom "org.springdoc:springdoc-openapi:2.5.0"
     }
 }
@@ -28,9 +29,14 @@ configurations {
 
 repositories {
     mavenCentral()
+
+    maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
+    // --- Inteligência Artificial (Spring AI) ---
+    implementation 'org.springframework.ai:spring-ai-google-gemini-starter'
+
     // --- Segurança & Autenticação ---
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.auth0:java-jwt:4.4.0'
@@ -43,8 +49,6 @@ dependencies {
     implementation 'org.springframework.amqp:spring-rabbit-stream'
 
     // --- Documentação (Swagger) ---
-    // 2. REMOVE A VERSÃO DAQUI
-    // Agora o Spring vai decidir a versão correta.
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui'
 
     // --- WebSocket ---
@@ -59,7 +63,7 @@ dependencies {
     // --- Banco de Dados ---
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-database-oracle'
-    runtimeOnly 'com.h2database:h2' // Adicionado para dev
+    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 
     // --- Utilitários ---
