@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.0'
-    id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.springframework.boot' version '3.3.7'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.fiap.gs2025'
 version = '0.0.1-SNAPSHOT'
-description = 'API completa de Java'
+description = 'API completa de Java '
 
 java {
     toolchain {
@@ -14,21 +14,6 @@ java {
     }
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.ai:spring-ai-bom:1.0.0"
-    }
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-ext {
-    set('springAiVersion', '1.0.0-M1')
-}
 
 repositories {
     mavenCentral()
@@ -37,9 +22,8 @@ repositories {
 }
 
 dependencies {
-    // --- Inteligência Artificial (Spring AI) ---
-    implementation 'org.springframework.ai:spring-ai-google-gemini-starter'
-    implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-starter'
+    // --- OpenAI ---
+    implementation 'org.springframework.ai:spring-ai-starter-openai'
 
     // --- Cache (Redis) ---
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -69,9 +53,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // --- Banco de Dados ---
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-database-oracle'
-    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 
     // --- Utilitários ---
