@@ -30,6 +30,13 @@ public class RecruiterProfileService {
     }
 
     @Transactional
+    public void deleteMyAccount() {
+        Recruiter recruiter = getCurrentAuthenticatedRecruiter();
+        recruiter.setAtive(false); // Soft Delete
+        recruiterRepository.save(recruiter);
+    }
+
+    @Transactional
     public RecruiterProfileResponse updateMyProfile(RecruiterProfileRequest request) {
         Recruiter recruiter = getCurrentAuthenticatedRecruiter();
 

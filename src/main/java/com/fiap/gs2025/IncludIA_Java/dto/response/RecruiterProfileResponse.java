@@ -9,6 +9,7 @@ public record RecruiterProfileResponse(
         String nome,
         String email,
         String fotoPerfilUrl,
+        boolean isOnline,
         EmpresaResponse empresa
 ) {
     public RecruiterProfileResponse(Recruiter recruiter) {
@@ -17,6 +18,7 @@ public record RecruiterProfileResponse(
                 recruiter.getNome(),
                 recruiter.getEmail(),
                 recruiter.getFotoPerfilUrl(),
+                recruiter.isOnline(),
                 new EmpresaResponse(recruiter.getEmpresa())
         );
     }

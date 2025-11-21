@@ -27,6 +27,12 @@ public class ChatController {
         return ResponseEntity.ok(chatService.getMessagesForChat(chatId, pageable));
     }
 
+    @DeleteMapping("/{chatId}")
+    public ResponseEntity<Void> deleteChat(@PathVariable UUID chatId) {
+        chatService.deleteChat(chatId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{chatId}/messages")
     public ResponseEntity<ChatMessageResponse> sendMessage(
             @PathVariable UUID chatId,

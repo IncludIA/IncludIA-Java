@@ -10,10 +10,11 @@ public record CandidateProfileResponse(
         UUID id,
         String nome,
         String email,
-
         String resumoPerfil,
         String resumoInclusivoIA,
         String fotoPerfilUrl,
+
+        boolean isOnline,
 
         String cidade,
         String estado,
@@ -33,6 +34,8 @@ public record CandidateProfileResponse(
                 candidate.getResumoPerfil(),
                 candidate.getResumoInclusivoIA(),
                 candidate.getFotoPerfilUrl(),
+
+                candidate.isOnline(),
 
                 (candidate.getEndereco() != null) ? candidate.getEndereco().getCidade() : null,
                 (candidate.getEndereco() != null) ? candidate.getEndereco().getEstado() : null,

@@ -163,4 +163,11 @@ public class CandidateProfileService {
 
         experienceRepository.delete(experience);
     }
+
+    @Transactional
+    public void deleteMyAccount() {
+        Candidate candidate = getCurrentAuthenticatedCandidate();
+        candidate.setAtive(false); // Soft Delete
+        candidateRepository.save(candidate);
+    }
 }

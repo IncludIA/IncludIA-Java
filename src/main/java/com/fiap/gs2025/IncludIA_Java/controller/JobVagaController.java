@@ -39,6 +39,12 @@ public class JobVagaController {
         return ResponseEntity.ok(matchService.getCandidateById(candidateId));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVaga(@PathVariable UUID id) {
+        vagaService.deleteVaga(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping
     public ResponseEntity<JobVagaResponse> createVaga(@Valid @RequestBody JobVagaRequest request) {
         JobVagaResponse response = vagaService.createVaga(request);

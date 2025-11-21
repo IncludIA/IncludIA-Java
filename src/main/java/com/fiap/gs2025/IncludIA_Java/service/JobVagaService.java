@@ -113,4 +113,20 @@ public class JobVagaService {
         JobVaga savedVaga = jobVagaRepository.save(vaga);
         return new JobVagaResponse(savedVaga);
     }
+
+
+
+    @Transactional
+    public void deleteVaga(UUID vagaId) {
+        Recruiter recruiter = getCurrentAuthenticatedRecruiter();
+        JobVaga vaga = jobVagaRepository.findById(vagaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vaga não encontrada"));
+
+        if (!vaga.getRecruiter().getId().equals(recruiter.getId())) {
+            throw new UnauthorizedAccessException("Você não tem permissão para excluir esta vaga");
+        }
+
+        vaga.setAtiva(false);
+        jobVagaRepository.save(vaga);
+    }
 }

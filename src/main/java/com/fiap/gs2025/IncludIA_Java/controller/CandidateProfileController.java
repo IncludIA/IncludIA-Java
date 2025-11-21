@@ -65,4 +65,10 @@ public class CandidateProfileController {
         profileService.deleteExperience(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteAccount() {
+        profileService.deleteMyAccount();
+        return ResponseEntity.noContent().build();
+    }
 }

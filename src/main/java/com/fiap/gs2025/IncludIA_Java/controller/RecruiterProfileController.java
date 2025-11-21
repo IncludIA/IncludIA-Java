@@ -24,4 +24,10 @@ public class RecruiterProfileController {
     public ResponseEntity<RecruiterProfileResponse> updateMyProfile(@Valid @RequestBody RecruiterProfileRequest request) {
         return ResponseEntity.ok(recruiterProfileService.updateMyProfile(request));
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteAccount() {
+        recruiterProfileService.deleteMyAccount(); // (ou recruiterProfileService.deleteMyAccount())
+        return ResponseEntity.noContent().build();
+    }
 }

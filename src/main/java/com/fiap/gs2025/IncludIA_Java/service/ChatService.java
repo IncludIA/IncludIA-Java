@@ -29,7 +29,7 @@ public class ChatService {
     private ChatMessageRepository chatMessageRepository;
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate; // Injetado para o WebSocket
+    private SimpMessagingTemplate messagingTemplate;
 
     private void checkUserChatAccess(Chat chat, UUID userId) {
         boolean isCandidate = chat.getMatch().getCandidate().getId().equals(userId);
@@ -39,6 +39,17 @@ public class ChatService {
         }
     }
 
+    @Transactional
+    public void deleteChat(UUID chatId) {
+        UUID userId = getAuthenticatedUserId();
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chat não encontrado"));
+
+        checkUserChatAccess(chat, userId);
+
+        chat.setAtive(false);
+        chatRepository.save(chat);
+    }
     private UUID getAuthenticatedUserId() {
         return ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
