@@ -14,6 +14,12 @@ java {
     }
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.ai:spring-ai-bom:1.0.0-M1"
+    }
+}
+
 
 repositories {
     mavenCentral()
@@ -23,7 +29,8 @@ repositories {
 
 dependencies {
     // --- OpenAI ---
-    implementation 'org.springframework.ai:spring-ai-starter-openai'
+    implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 
     // --- Cache (Redis) ---
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
