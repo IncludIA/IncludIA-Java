@@ -2,7 +2,7 @@
 
 > 🚀 **Global Solution 2025 - O Futuro do Trabalho**
 >
-> 🎓 *Disruptive Architectures: IOT, IOB & Generative IA* | *Java Advanced*
+> 🎓 *Disruptive Architectures: *Java Advanced*
 
 ![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.7-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
