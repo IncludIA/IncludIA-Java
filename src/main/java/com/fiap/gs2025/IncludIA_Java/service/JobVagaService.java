@@ -51,7 +51,7 @@ public class JobVagaService {
                         .orElseThrow(() -> new ResourceNotFoundException("Skill não encontrada: " + skillId)))
                 .collect(Collectors.toSet());
 
-        String descricaoInclusiva = aiService.gerarDescricaoInclusiva(request.descricaoOriginal());
+        String descricaoInclusiva = aiService.gerarDescricaoInclusiva(request.titulo(), request.descricaoOriginal());
 
         JobVaga vaga = new JobVaga();
         vaga.setId(UUID.randomUUID());
@@ -103,7 +103,7 @@ public class JobVagaService {
             throw new UnauthorizedAccessException("Você não tem permissão para editar esta vaga");
         }
 
-        String descricaoInclusiva = aiService.gerarDescricaoInclusiva(request.descricaoOriginal());
+        String descricaoInclusiva = aiService.gerarDescricaoInclusiva(request.titulo(), request.descricaoOriginal());
 
         vaga.setTitulo(request.titulo());
         vaga.setDescricaoOriginal(request.descricaoOriginal());

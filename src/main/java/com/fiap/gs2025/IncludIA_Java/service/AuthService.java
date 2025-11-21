@@ -11,6 +11,7 @@ import com.fiap.gs2025.IncludIA_Java.exceptions.DuplicateResourceException;
 import com.fiap.gs2025.IncludIA_Java.exceptions.ResourceNotFoundException;
 import com.fiap.gs2025.IncludIA_Java.models.Candidate;
 import com.fiap.gs2025.IncludIA_Java.models.Empresa;
+import com.fiap.gs2025.IncludIA_Java.models.Endereco;
 import com.fiap.gs2025.IncludIA_Java.models.Recruiter;
 import com.fiap.gs2025.IncludIA_Java.repository.CandidateRepository;
 import com.fiap.gs2025.IncludIA_Java.repository.EmpresaRepository;
@@ -57,10 +58,21 @@ public class AuthService {
         Candidate candidate = new Candidate();
         candidate.setId(UUID.randomUUID());
         candidate.setNome(request.nome());
+        candidate.setCpf(request.cpf());
         candidate.setEmail(request.email());
         candidate.setSenhaHash(passwordEncoder.encode(request.senha()));
         candidate.setResumoPerfil(request.resumoPerfil());
         candidate.setAtive(true);
+        candidate.setRaioBuscaKm(request.raioBuscaKm() != null ? request.raioBuscaKm() : 30);
+
+        Endereco endereco = new Endereco();
+        endereco.setCep(request.cep());
+        endereco.setLogradouro(request.logradouro());
+        endereco.setNumero(request.numero());
+        endereco.setBairro(request.bairro());
+        endereco.setCidade(request.cidade());
+        endereco.setEstado(request.estado());
+        candidate.setEndereco(endereco);
 
         Candidate savedCandidate = candidateRepository.save(candidate);
         return new CandidateProfileResponse(savedCandidate);

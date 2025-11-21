@@ -14,6 +14,7 @@ public record MatchResponse(
         MatchStatus status,
         boolean isLikedByCandidate,
         boolean isLikedByRecruiter
+
 ) {
     public MatchResponse(Match match) {
         this(

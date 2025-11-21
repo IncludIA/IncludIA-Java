@@ -17,12 +17,19 @@ public class Candidate {
     @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false, unique = true)
+    private String cpf;
     @Email
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String senhaHash;
+
+    @Embedded
+    private Endereco endereco;
+
+    private Integer raioBuscaKm;
 
     @Column(length = 2000)
     private String resumoPerfil;
@@ -86,6 +93,14 @@ public class Candidate {
         this.nome = nome;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -100,6 +115,22 @@ public class Candidate {
 
     public void setSenhaHash(String senhaHash) {
         this.senhaHash = senhaHash;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Integer getRaioBuscaKm() {
+        return raioBuscaKm;
+    }
+
+    public void setRaioBuscaKm(Integer raioBuscaKm) {
+        this.raioBuscaKm = raioBuscaKm;
     }
 
     public String getResumoPerfil() {

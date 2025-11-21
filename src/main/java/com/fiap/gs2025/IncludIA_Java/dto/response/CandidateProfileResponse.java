@@ -1,6 +1,5 @@
 package com.fiap.gs2025.IncludIA_Java.dto.response;
 
-
 import com.fiap.gs2025.IncludIA_Java.models.Candidate;
 
 import java.util.Set;
@@ -11,9 +10,15 @@ public record CandidateProfileResponse(
         UUID id,
         String nome,
         String email,
+
         String resumoPerfil,
         String resumoInclusivoIA,
         String fotoPerfilUrl,
+
+        String cidade,
+        String estado,
+        Integer raioBuscaKm,
+
         Set<SkillResponse> skills,
         Set<ExperienceResponse> experiencias,
         Set<EducationResponse> formacoes,
@@ -28,6 +33,11 @@ public record CandidateProfileResponse(
                 candidate.getResumoPerfil(),
                 candidate.getResumoInclusivoIA(),
                 candidate.getFotoPerfilUrl(),
+
+                (candidate.getEndereco() != null) ? candidate.getEndereco().getCidade() : null,
+                (candidate.getEndereco() != null) ? candidate.getEndereco().getEstado() : null,
+                candidate.getRaioBuscaKm(),
+
                 candidate.getSkills().stream().map(SkillResponse::new).collect(Collectors.toSet()),
                 candidate.getExperiencias().stream().map(ExperienceResponse::new).collect(Collectors.toSet()),
                 candidate.getFormacoes().stream().map(EducationResponse::new).collect(Collectors.toSet()),

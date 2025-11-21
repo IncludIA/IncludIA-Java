@@ -66,4 +66,6 @@ public class ProfileViewService {
                 .map(ProfileViewResponse::new)
                 .collect(Collectors.toList());
     }
+
+    
 }
