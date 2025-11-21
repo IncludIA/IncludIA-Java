@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.7'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management' version '1.1.5'
 }
 
 group = 'com.fiap.gs2025'
 version = '0.0.1-SNAPSHOT'
-description = 'API completa de Java '
+description = 'API completa de Java'
 
 java {
     toolchain {
@@ -26,14 +26,20 @@ configurations {
     }
 }
 
+ext {
+    set('springAiVersion', '1.0.0-M1')
+}
+
 repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
 }
 
 dependencies {
     // --- Inteligência Artificial (Spring AI) ---
     implementation 'org.springframework.ai:spring-ai-google-gemini-starter'
+    implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-starter'
 
     // --- Cache (Redis) ---
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
