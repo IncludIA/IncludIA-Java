@@ -41,6 +41,8 @@ public class Candidate {
 
     private boolean isAtive;
 
+    private boolean isOnline;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "candidate_skills")
     private Set<Skill> skills = new HashSet<>();
@@ -235,5 +237,13 @@ public class Candidate {
 
     public void setNotificacoes(Set<Notification> notificacoes) {
         this.notificacoes = notificacoes;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 }

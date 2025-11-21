@@ -9,7 +9,5 @@ public record MatchActionRequest(
         UUID targetId,
 
         @NotNull(message = "{action.liked.notnull}")
-        Boolean isLiked,
-
-        String motivoCompatibilidade
+        Boolean isLiked
 ) {}

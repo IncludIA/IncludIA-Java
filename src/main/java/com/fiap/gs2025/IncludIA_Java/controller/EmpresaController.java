@@ -33,4 +33,15 @@ public class EmpresaController {
     public ResponseEntity<EmpresaResponse> getEmpresaById(@PathVariable UUID id) {
         return ResponseEntity.ok(empresaService.getEmpresaById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmpresaResponse> update(@PathVariable UUID id, @Valid @RequestBody EmpresaRequest request) {
+        return ResponseEntity.ok(empresaService.updateEmpresa(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        empresaService.deleteEmpresa(id);
+        return ResponseEntity.noContent().build();
+    }
 }

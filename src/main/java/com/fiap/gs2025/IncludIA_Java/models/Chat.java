@@ -20,9 +20,19 @@ public class Chat {
     @Column(nullable = false)
     private Instant createdAt;
 
+    private boolean isAtive = true;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ChatMessage> messages = new HashSet<>();
+
+    public boolean isAtive() {
+        return isAtive;
+    }
+
+    public void setAtive(boolean ative) {
+        isAtive = ative;
+    }
 
     public UUID getId() {
         return id;

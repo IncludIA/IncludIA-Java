@@ -1,6 +1,6 @@
 package com.fiap.gs2025.IncludIA_Java.service;
 
-import com.fiap.gs2025.IncludIA_Java.dto.request.MatchActionRequest;
+import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateMatchResponse; // Importa o novo DTO
 import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateProfileResponse;
 import com.fiap.gs2025.IncludIA_Java.dto.response.MatchResponse;
 import com.fiap.gs2025.IncludIA_Java.enums.MatchStatus;
@@ -57,23 +57,51 @@ public class MatchService {
         }
     }
 
-    public List<MatchActionRequest> findBestCandidatesForJob(UUID vagaId) {
+
+    public List<CandidateMatchResponse> getCandidatesFeedForJob(UUID vagaId) {
         JobVaga vaga = jobVagaRepository.findById(vagaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vaga não encontrada"));
 
-        List<Candidate> allCandidates = candidateRepository.findAll(); // Em prod, filtre isso no banco!
+        List<Candidate> allCandidates = candidateRepository.findAll().stream()
+                .filter(Candidate::isAtive)
+                .collect(Collectors.toList());
+
+        List<UUID> swipedCandidateIds = matchRepository.findAll().stream()
+                .filter(m -> m.getVaga().getId().equals(vagaId))
+                .map(m -> m.getCandidate().getId())
+                .collect(Collectors.toList());
 
         return allCandidates.stream()
+                .filter(c -> !swipedCandidateIds.contains(c.getId()))
                 .map(candidate -> calculateCompatibility(candidate, vaga))
-                .sorted((c1, c2) -> Integer.compare(c2.porcentagemCompatibilidade(), c1.porcentagemCompatibilidade())) // Ordem decrescente
+                .sorted((c1, c2) -> Integer.compare(c2.porcentagemCompatibilidade(), c1.porcentagemCompatibilidade()))
                 .collect(Collectors.toList());
     }
 
-    private MatchActionRequest calculateCompatibility(Candidate candidate, JobVaga vaga) {
+    public CandidateProfileResponse getCandidateById(UUID candidateId) {
+        Candidate c = candidateRepository.findById(candidateId)
+                .filter(Candidate::isAtive)
+                .orElseThrow(() -> new ResourceNotFoundException("Candidato não encontrado ou inativo"));
+
+        return new CandidateProfileResponse(c);
+    }
+
+    public List<CandidateMatchResponse> findBestCandidatesForJob(UUID vagaId) {
+        JobVaga vaga = jobVagaRepository.findById(vagaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vaga não encontrada"));
+
+        List<Candidate> allCandidates = candidateRepository.findAll();
+
+        return allCandidates.stream()
+                .map(candidate -> calculateCompatibility(candidate, vaga))
+                .sorted((c1, c2) -> Integer.compare(c2.porcentagemCompatibilidade(), c1.porcentagemCompatibilidade()))
+                .collect(Collectors.toList());
+    }
+
+    private CandidateMatchResponse calculateCompatibility(Candidate candidate, JobVaga vaga) {
         int score = 0;
         StringBuilder motivos = new StringBuilder();
 
-        // 1. Skills (Peso alto: 60%)
         long matchingSkills = candidate.getSkills().stream()
                 .filter(skill -> vaga.getSkillsDesejadas().contains(skill))
                 .count();
@@ -85,23 +113,18 @@ public class MatchService {
             if(matchingSkills > 0) motivos.append(matchingSkills).append(" skills em comum. ");
         }
 
-        // 2. Localização (Peso: 20%)
         if (candidate.getEndereco() != null && vaga.getLocalizacao() != null) {
-            // Lógica simples: Se a cidade do candidato estiver na string de localização da vaga
             if (vaga.getLocalizacao().toLowerCase().contains(candidate.getEndereco().getCidade().toLowerCase())) {
                 score += 20;
                 motivos.append("Localização compatível. ");
             }
         }
 
-        // 3. Modelo de Trabalho (Peso: 20%)
-        // (Assumindo que adicionamos ModeloTrabalho ao Candidato depois, ou inferindo)
-        // Se a vaga for REMOTO, ganha pontos automaticamente
         if (vaga.getModeloTrabalho().toString().equals("REMOTO")) {
             score += 20;
             motivos.append("Vaga remota. ");
         }
 
-        return new MatchActionRequest(new CandidateProfileResponse(candidate), score, motivos.toString());
+        return new CandidateMatchResponse(new CandidateProfileResponse(candidate), score, motivos.toString());
     }
 }

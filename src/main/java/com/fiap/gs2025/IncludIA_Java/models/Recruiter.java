@@ -26,6 +26,8 @@ public class Recruiter {
 
     private String fotoPerfilUrl;
 
+    private boolean isOnline;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)
@@ -133,5 +135,13 @@ public class Recruiter {
 
     public void setNotificacoes(Set<Notification> notificacoes) {
         this.notificacoes = notificacoes;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 }

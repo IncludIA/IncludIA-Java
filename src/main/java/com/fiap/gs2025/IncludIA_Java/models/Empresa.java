@@ -30,6 +30,8 @@ public class Empresa {
 
     private String fotoCapaUrl;
 
+    private boolean isAtive = true;
+
     @JsonManagedReference
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
     private Set<Recruiter> recruiters = new HashSet<>();
@@ -116,5 +118,13 @@ public class Empresa {
 
     public void setVagas(Set<JobVaga> vagas) {
         this.vagas = vagas;
+    }
+
+    public boolean isAtive() {
+        return isAtive;
+    }
+
+    public void setAtive(boolean ative) {
+        isAtive = ative;
     }
 }

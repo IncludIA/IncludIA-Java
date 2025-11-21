@@ -3,6 +3,7 @@ package com.fiap.gs2025.IncludIA_Java.service;
 import com.fiap.gs2025.IncludIA_Java.dto.request.*;
 import com.fiap.gs2025.IncludIA_Java.dto.response.*;
 import com.fiap.gs2025.IncludIA_Java.exceptions.ResourceNotFoundException;
+import com.fiap.gs2025.IncludIA_Java.exceptions.UnauthorizedAccessException;
 import com.fiap.gs2025.IncludIA_Java.models.*;
 import com.fiap.gs2025.IncludIA_Java.repository.*;
 import com.fiap.gs2025.IncludIA_Java.security.CustomUserDetails;
@@ -148,5 +149,18 @@ public class CandidateProfileService {
         candidate.getSkills().add(skill);
         Candidate savedCandidate = candidateRepository.save(candidate);
         return new CandidateProfileResponse(savedCandidate);
+    }
+
+    @Transactional
+    public void deleteExperience(UUID experienceId) {
+        Candidate candidate = getCurrentAuthenticatedCandidate();
+        Experience experience = experienceRepository.findById(experienceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Experiência não encontrada"));
+
+        if (!experience.getCandidate().getId().equals(candidate.getId())) {
+            throw new UnauthorizedAccessException("Esta experiência não pertence a você");
+        }
+
+        experienceRepository.delete(experience);
     }
 }

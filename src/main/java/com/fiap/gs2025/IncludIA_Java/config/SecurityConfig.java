@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/skills").permitAll()
                         .requestMatchers(HttpMethod.GET, "/idiomas").permitAll()
                         .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/health").permitAll()
 
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()

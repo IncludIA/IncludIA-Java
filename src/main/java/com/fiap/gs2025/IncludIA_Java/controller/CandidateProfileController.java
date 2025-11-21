@@ -59,4 +59,10 @@ public class CandidateProfileController {
     public ResponseEntity<CandidateProfileResponse> updateSummary(@RequestBody String summary) {
         return ResponseEntity.ok(profileService.updateProfileSummary(summary));
     }
+
+    @DeleteMapping("/experience/{id}")
+    public ResponseEntity<Void> removeExperience(@PathVariable UUID id) {
+        profileService.deleteExperience(id);
+        return ResponseEntity.noContent().build();
+    }
 }

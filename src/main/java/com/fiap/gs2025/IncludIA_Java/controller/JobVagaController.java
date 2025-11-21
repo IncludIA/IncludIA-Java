@@ -1,8 +1,11 @@
 package com.fiap.gs2025.IncludIA_Java.controller;
 
 import com.fiap.gs2025.IncludIA_Java.dto.request.JobVagaRequest;
+import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateMatchResponse;
+import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateProfileResponse;
 import com.fiap.gs2025.IncludIA_Java.dto.response.JobVagaResponse;
 import com.fiap.gs2025.IncludIA_Java.service.JobVagaService;
+import com.fiap.gs2025.IncludIA_Java.service.MatchService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,6 +25,19 @@ public class JobVagaController {
 
     @Autowired
     private JobVagaService vagaService;
+
+    @Autowired
+    private MatchService matchService;
+
+    @GetMapping("/{vagaId}/candidates-feed")
+    public ResponseEntity<List<CandidateMatchResponse>> getCandidatesFeed(@PathVariable UUID vagaId) {
+        return ResponseEntity.ok(matchService.getCandidatesFeedForJob(vagaId));
+    }
+
+    @GetMapping("/candidate-detail/{candidateId}")
+    public ResponseEntity<CandidateProfileResponse> getCandidateDetail(@PathVariable UUID candidateId) {
+        return ResponseEntity.ok(matchService.getCandidateById(candidateId));
+    }
 
     @PostMapping
     public ResponseEntity<JobVagaResponse> createVaga(@Valid @RequestBody JobVagaRequest request) {

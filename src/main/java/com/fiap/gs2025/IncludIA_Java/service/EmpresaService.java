@@ -33,6 +33,7 @@ public class EmpresaService {
         empresa.setDescricao(request.descricao());
         empresa.setCultura(request.cultura());
         empresa.setFotoCapaUrl(request.fotoCapaUrl());
+        empresa.setAtive(true);
 
         Empresa savedEmpresa = empresaRepository.save(empresa);
         return new EmpresaResponse(savedEmpresa);
@@ -40,7 +41,34 @@ public class EmpresaService {
 
     public EmpresaResponse getEmpresaById(UUID id) {
         Empresa empresa = empresaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+                .filter(Empresa::isAtive)
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada ou inativa"));
         return new EmpresaResponse(empresa);
+    }
+
+    @Transactional
+    public EmpresaResponse updateEmpresa(UUID id, EmpresaRequest request) {
+        Empresa empresa = empresaRepository.findById(id)
+                .filter(Empresa::isAtive)
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+
+        empresa.setNomeOficial(request.nomeOficial());
+        empresa.setNomeFantasia(request.nomeFantasia());
+        empresa.setLocalizacao(request.localizacao());
+        empresa.setDescricao(request.descricao());
+        empresa.setCultura(request.cultura());
+        empresa.setFotoCapaUrl(request.fotoCapaUrl());
+
+        return new EmpresaResponse(empresaRepository.save(empresa));
+    }
+
+    @Transactional
+    public void deleteEmpresa(UUID id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .filter(Empresa::isAtive)
+                .orElseThrow(() -> new ResourceNotFoundException("Empresa não encontrada"));
+
+        empresa.setAtive(false);
+        empresaRepository.save(empresa);
     }
 }
