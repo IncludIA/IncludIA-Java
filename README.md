@@ -79,7 +79,7 @@ O sistema foi projetado para resolver a exclusão no mercado de trabalho atravé
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu-time/IncludIA-Java.git](https://github.com/seu-time/IncludIA-Java.git)
+    git clone https://github.com/seu-time/IncludIA-Java.git
     cd IncludIA-Java
     ```
 
