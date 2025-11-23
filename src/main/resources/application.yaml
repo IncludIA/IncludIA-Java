@@ -7,40 +7,42 @@ spring:
 
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      host: redis-includia-cache.brazilsouth.azurecontainer.io
+      port: 6379
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: jdbc:oracle:thin:@oracle-includia-db.brazilsouth.azurecontainer.io:1521/FREEPDB1
+    username: includia
+    password: Includia2025!Strong
     driver-class-name: oracle.jdbc.OracleDriver
 
-    jpa:
-      database-platform: org.hibernate.dialect.OracleDialect
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
   rabbitmq:
-    host: ${SPRING_RABBITMQ_HOST}
-    port: ${SPRING_RABBITMQ_PORT}
-    username: ${SPRING_RABBITMQ_USERNAME}
-    password: ${SPRING_RABBITMQ_PASSWORD}
-
-  api:
-    iot:
-      url: ${IOT_API_URL}
+    host: rabbit-includia-msg.brazilsouth.azurecontainer.io
+    port: 5672
+    username: admin
+    password: Includia2025!Strong
 
   messages:
     basename: messages
     encoding: UTF-8
 
+# --- CORREÇÃO AQUI: 'api' deve estar na margem esquerda (nível raiz) ---
+api:
+  iot:
+    url: https://app-includia-iot-2771.azurewebsites.net
+
+# 'mq' e 'jwt' também devem estar na margem esquerda
 mq:
   queue:
     match: "match-queue"
 
 jwt:
-  secret: ${JWT-SECRET:DefaultSecretKey}
+  secret: "794f595b47e4100cf65a897a5a4d3776fcc21eb92d4c9aeae1dd71c91ba3f5e62a3970a75a91044cebe9d8d4cec098f67eb4a07a6b8aa1a83ba7c5f01828e953c0e55f4a877b84589f24cec936654dbf"
   expiration:
     hours: 24
