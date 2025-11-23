@@ -9,11 +9,12 @@ import java.util.UUID;
 @Table(name = "t_inc_mensagem")
 public class ChatMessage {
     @Id
+    @Column(name = "id_mensagem")
     private UUID id;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_id", nullable = false)
+    @JoinColumn(name = "id_chat", nullable = false)
     private Chat chat;
 
     @Column(length = 2000, nullable = false)

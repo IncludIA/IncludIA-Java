@@ -13,10 +13,11 @@ import java.util.UUID;
 @Table(name = "t_inc_chat")
 public class Chat {
     @Id
+    @Column(name = "id_chat")
     private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "match_id", nullable = false, unique = true)
+    @JoinColumn(name = "id_match", nullable = false, unique = true)
     private Match match;
 
     @CreatedDate

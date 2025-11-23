@@ -43,7 +43,7 @@ public class JobVagaController {
             @RequestParam(required = false) TipoContrato tipo,
             @RequestParam(required = false) BigDecimal minSalario,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
-        return ResponseEntity.ok(vagaService.findVagasWithFilters(modelo, tipo, minSalario, pageable));
+        return ResponseEntity.ok(vagaService.getAllActiveVagas(pageable));
     }
 
     @GetMapping("/candidate-detail/{candidateId}")

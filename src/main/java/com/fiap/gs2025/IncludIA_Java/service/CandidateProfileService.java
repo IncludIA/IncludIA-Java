@@ -274,4 +274,7 @@ public class CandidateProfileService {
         candidate.setAtive(false); // Soft Delete
         candidateRepository.save(candidate);
     }
+
+    public void updatePushToken(String token) {
+    }
 }
