@@ -13,9 +13,10 @@ public class Endereco {
     private Double latitude;
     private Double longitude;
 
-    public Endereco() {
-    }
+    // Construtor Vazio (Obrigatório para JPA)
+    public Endereco() {}
 
+    // Construtor Completo
     public Endereco(String cep, String logradouro, String numero, String bairro, String cidade, String estado, Double latitude, Double longitude) {
         this.cep = cep;
         this.logradouro = logradouro;
@@ -27,67 +28,28 @@ public class Endereco {
         this.longitude = longitude;
     }
 
-    public String getCep() {
-        return cep;
-    }
+    // Getters e Setters Manuais
+    public String getCep() { return cep; }
+    public void setCep(String cep) { this.cep = cep; }
 
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
+    public String getLogradouro() { return logradouro; }
+    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
 
-    public String getLogradouro() {
-        return logradouro;
-    }
+    public String getNumero() { return numero; }
+    public void setNumero(String numero) { this.numero = numero; }
 
-    public void setLogradouro(String logradouro) {
-        this.logradouro = logradouro;
-    }
+    public String getBairro() { return bairro; }
+    public void setBairro(String bairro) { this.bairro = bairro; }
 
-    public String getNumero() {
-        return numero;
-    }
+    public String getCidade() { return cidade; }
+    public void setCidade(String cidade) { this.cidade = cidade; }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public String getBairro() {
-        return bairro;
-    }
+    public Double getLatitude() { return latitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
 
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
 }
