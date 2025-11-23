@@ -1,5 +1,5 @@
 trigger:
-  - main
+  - azure-pipelines
 
 variables:
   # --- Suas Variáveis ---
