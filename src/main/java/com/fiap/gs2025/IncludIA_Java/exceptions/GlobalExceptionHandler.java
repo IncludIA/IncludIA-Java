@@ -1,5 +1,8 @@
 package com.fiap.gs2025.IncludIA_Java.exceptions;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,9 +16,21 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @Autowired
+    private MessageSource messageSource;
+
+    private String getMessage(String code, String defaultMessage) {
+        try {
+            return messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
+        } catch (Exception e) {
+            return defaultMessage;
+        }
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {
-        return new ResponseEntity<>(Map.of("erro", "Credenciais inválidas (usuário ou senha incorretos)"), HttpStatus.UNAUTHORIZED);
+        String msg = getMessage("auth.bad.credentials", "Credenciais inválidas");
+        return new ResponseEntity<>(Map.of("erro", msg), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -45,12 +60,12 @@ public class GlobalExceptionHandler {
                         fieldError -> fieldError.getField(),
                         fieldError -> fieldError.getDefaultMessage()
                 ));
-        return new ResponseEntity<>(Map.of("erro", "Erro de validação", "detalhes", errors), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Map.of("erro", getMessage("validation.error", "Erro de validação"), "detalhes", errors), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
-        ex.printStackTrace(); // Logar o erro
+        ex.printStackTrace();
         return new ResponseEntity<>(Map.of("erro", "Ocorreu um erro interno no servidor"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

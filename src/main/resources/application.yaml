@@ -28,6 +28,10 @@ spring:
     username: ${SPRING_RABBITMQ_USERNAME}
     password: ${SPRING_RABBITMQ_PASSWORD}
 
+  api:
+    iot:
+      url: ${IOT_API_URL}
+
   messages:
     basename: messages
     encoding: UTF-8

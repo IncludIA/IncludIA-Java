@@ -1,19 +1,22 @@
 package com.fiap.gs2025.IncludIA_Java.service;
 
-import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateMatchResponse; // Importa o novo DTO
+import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateMatchResponse;
 import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateProfileResponse;
 import com.fiap.gs2025.IncludIA_Java.dto.response.MatchResponse;
 import com.fiap.gs2025.IncludIA_Java.enums.MatchStatus;
 import com.fiap.gs2025.IncludIA_Java.exceptions.ResourceNotFoundException;
 import com.fiap.gs2025.IncludIA_Java.models.Candidate;
 import com.fiap.gs2025.IncludIA_Java.models.JobVaga;
+import com.fiap.gs2025.IncludIA_Java.models.Match;
 import com.fiap.gs2025.IncludIA_Java.models.Recruiter;
 import com.fiap.gs2025.IncludIA_Java.repository.CandidateRepository;
 import com.fiap.gs2025.IncludIA_Java.repository.JobVagaRepository;
 import com.fiap.gs2025.IncludIA_Java.repository.MatchRepository;
 import com.fiap.gs2025.IncludIA_Java.repository.RecruiterRepository;
 import com.fiap.gs2025.IncludIA_Java.security.CustomUserDetails;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +42,12 @@ public class MatchService {
     @Autowired
     private JobVagaRepository jobVagaRepository;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Value("${mq.queue.match}")
+    private String matchQueue;
+
     @Transactional(readOnly = true)
     public Page<MatchResponse> getMyMatches(Pageable pageable) {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -57,6 +66,25 @@ public class MatchService {
         }
     }
 
+    @Transactional
+    public void processarSwipe(UUID vagaId, UUID candidateId, boolean isLiked) {
+        if (isLiked) {
+            JobVaga vaga = jobVagaRepository.findById(vagaId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Vaga não encontrada"));
+            Candidate candidate = candidateRepository.findById(candidateId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Candidato não encontrado"));
+
+            Match match = new Match();
+            match.setVaga(vaga);
+            match.setCandidate(candidate);
+            match.setStatus(MatchStatus.MATCHED);
+
+            matchRepository.save(match);
+
+            String mensagem = "Novo Match! Vaga: " + vaga.getTitulo() + " - Candidato: " + candidate.getNome();
+            rabbitTemplate.convertAndSend(matchQueue, mensagem);
+        }
+    }
 
     public List<CandidateMatchResponse> getCandidatesFeedForJob(UUID vagaId) {
         JobVaga vaga = jobVagaRepository.findById(vagaId)
@@ -98,7 +126,7 @@ public class MatchService {
                 .collect(Collectors.toList());
     }
 
-    private CandidateMatchResponse calculateCompatibility(Candidate candidate, JobVaga vaga) {
+    public CandidateMatchResponse calculateCompatibility(Candidate candidate, JobVaga vaga) {
         int score = 0;
         StringBuilder motivos = new StringBuilder();
 
