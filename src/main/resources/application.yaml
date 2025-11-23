@@ -7,13 +7,13 @@ spring:
 
   data:
     redis:
-      host: redis-includia-cache.brazilsouth.azurecontainer.io
+      host: ${REDIS_HOST}
       port: 6379
 
   datasource:
-    url: jdbc:oracle:thin:@oracle-includia-db.brazilsouth.azurecontainer.io:1521/FREEPDB1
-    username: includia
-    password: Includia2025!Strong
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: oracle.jdbc.OracleDriver
 
   jpa:
@@ -23,10 +23,10 @@ spring:
     show-sql: true
 
   rabbitmq:
-    host: rabbit-includia-msg.brazilsouth.azurecontainer.io
+    host: ${SPRING_RABBITMQ_HOST}
     port: 5672
-    username: admin
-    password: Includia2025!Strong
+    username: ${SPRING_RABBITMQ_USERNAME}
+    password: ${SPRING_RABBITMQ_PASSWORD}
 
   messages:
     basename: messages
@@ -43,6 +43,6 @@ mq:
     match: "match-queue"
 
 jwt:
-  secret: "794f595b47e4100cf65a897a5a4d3776fcc21eb92d4c9aeae1dd71c91ba3f5e62a3970a75a91044cebe9d8d4cec098f67eb4a07a6b8aa1a83ba7c5f01828e953c0e55f4a877b84589f24cec936654dbf"
+  secret: ${JWT_SECRET}
   expiration:
     hours: 24
