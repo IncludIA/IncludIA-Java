@@ -31,8 +31,13 @@ public class EmpresaService {
         empresa.setCnpj(request.cnpj());
         empresa.setLocalizacao(request.localizacao());
         empresa.setDescricao(request.descricao());
-        empresa.setCultura(request.cultura());
+
+        // Novos Campos
+        empresa.setFotoLogo(request.fotoLogo());
         empresa.setFotoCapaUrl(request.fotoCapaUrl());
+
+        // Padrões
+        empresa.setVerificado(false); // Padrão é não verificado ao criar
         empresa.setAtive(true);
 
         Empresa savedEmpresa = empresaRepository.save(empresa);
@@ -56,7 +61,9 @@ public class EmpresaService {
         empresa.setNomeFantasia(request.nomeFantasia());
         empresa.setLocalizacao(request.localizacao());
         empresa.setDescricao(request.descricao());
-        empresa.setCultura(request.cultura());
+
+        // Atualiza imagens
+        empresa.setFotoLogo(request.fotoLogo());
         empresa.setFotoCapaUrl(request.fotoCapaUrl());
 
         return new EmpresaResponse(empresaRepository.save(empresa));

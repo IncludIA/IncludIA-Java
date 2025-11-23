@@ -2,6 +2,7 @@ package com.fiap.gs2025.IncludIA_Java.controller;
 
 import com.fiap.gs2025.IncludIA_Java.dto.auth.LoginRequest;
 import com.fiap.gs2025.IncludIA_Java.dto.auth.LoginResponse;
+import com.fiap.gs2025.IncludIA_Java.dto.auth.SocialLoginRequest;
 import com.fiap.gs2025.IncludIA_Java.dto.request.CandidateRegistrationRequest;
 import com.fiap.gs2025.IncludIA_Java.dto.request.RecruiterRegistrationRequest;
 import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateProfileResponse;
@@ -35,5 +36,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/social-login")
+    public ResponseEntity<LoginResponse> socialLogin(@RequestBody SocialLoginRequest request) {
+        return ResponseEntity.ok(authService.socialLogin(request));
     }
 }

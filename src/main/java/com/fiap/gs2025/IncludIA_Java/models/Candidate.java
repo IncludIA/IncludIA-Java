@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "candidates")
+@Table(name = "t_inc_candidato")
 public class Candidate {
 
     @Id

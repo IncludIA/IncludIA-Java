@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "skills")
+@Table(name = "t_inc_skill")
 public class Skill {
     @Id
     private UUID id;

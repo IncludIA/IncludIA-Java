@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "job_vagas")
+@Table(name = "t_inc_vaga")
 public class JobVaga {
     @Id
     private UUID id;

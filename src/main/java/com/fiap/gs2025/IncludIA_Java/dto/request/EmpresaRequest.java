@@ -19,8 +19,6 @@ public record EmpresaRequest(
         @Size(max = 4000)
         String descricao,
 
-        @Size(max = 4000)
-        String cultura,
-
+        String fotoLogo, // NOVO
         String fotoCapaUrl
 ) {}

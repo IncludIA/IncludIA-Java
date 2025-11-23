@@ -1,7 +1,6 @@
 package com.fiap.gs2025.IncludIA_Java.dto.response;
 
 import com.fiap.gs2025.IncludIA_Java.models.Empresa;
-
 import java.util.UUID;
 
 public record EmpresaResponse(
@@ -11,8 +10,9 @@ public record EmpresaResponse(
         String cnpj,
         String localizacao,
         String descricao,
-        String cultura,
-        String fotoCapaUrl
+        String fotoLogo,
+        String fotoCapaUrl,
+        boolean isVerificado
 ) {
     public EmpresaResponse(Empresa empresa) {
         this(
@@ -22,8 +22,9 @@ public record EmpresaResponse(
                 empresa.getCnpj(),
                 empresa.getLocalizacao(),
                 empresa.getDescricao(),
-                empresa.getCultura(),
-                empresa.getFotoCapaUrl()
+                empresa.getFotoLogo(),
+                empresa.getFotoCapaUrl(),
+                empresa.isVerificado()
         );
     }
 }

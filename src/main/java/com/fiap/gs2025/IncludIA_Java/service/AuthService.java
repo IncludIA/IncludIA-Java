@@ -8,6 +8,7 @@ import com.fiap.gs2025.IncludIA_Java.dto.request.RecruiterRegistrationRequest;
 import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateProfileResponse;
 import com.fiap.gs2025.IncludIA_Java.dto.response.RecruiterProfileResponse;
 import com.fiap.gs2025.IncludIA_Java.exceptions.DuplicateResourceException;
+import com.fiap.gs2025.IncludIA_Java.exceptions.InvalidRequestException;
 import com.fiap.gs2025.IncludIA_Java.exceptions.ResourceNotFoundException;
 import com.fiap.gs2025.IncludIA_Java.models.Candidate;
 import com.fiap.gs2025.IncludIA_Java.models.Empresa;
@@ -22,11 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
+
+import static java.util.Collections.singletonList;
 
 @Service
 public class AuthService {
@@ -116,5 +121,46 @@ public class AuthService {
         }
 
         return new LoginResponse(token, userDetails.getId(), nome, userDetails.getUsername(), role);
+    }
+
+    public LoginResponse socialLogin(com.fiap.gs2025.IncludIA_Java.dto.auth.SocialLoginRequest request) {
+        String email = request.email();
+
+        var candidateOpt = candidateRepository.findByEmail(email);
+        if (candidateOpt.isPresent()) {
+            Candidate c = candidateOpt.get();
+            return createLoginResponse(c.getId(), c.getNome(), c.getEmail(), "ROLE_CANDIDATE");
+        }
+
+        var recruiterOpt = recruiterRepository.findByEmail(email);
+        if (recruiterOpt.isPresent()) {
+            Recruiter r = recruiterOpt.get();
+            return createLoginResponse(r.getId(), r.getNome(), r.getEmail(), "ROLE_RECRUITER");
+        }
+
+        Candidate newCandidate = new Candidate();
+        newCandidate.setId(UUID.randomUUID());
+        newCandidate.setNome(request.nome() != null ? request.nome() : "Usuário Social");
+        newCandidate.setEmail(email);
+        newCandidate.setCpf(String.valueOf(System.currentTimeMillis()).substring(0, 11));
+        newCandidate.setSenhaHash(passwordEncoder.encode(UUID.randomUUID().toString()));
+        newCandidate.setAtive(true);
+        newCandidate.setResumoPerfil("Perfil criado via " + request.provider());
+
+        candidateRepository.save(newCandidate);
+
+        return createLoginResponse(newCandidate.getId(), newCandidate.getNome(), newCandidate.getEmail(), "ROLE_CANDIDATE");
+    }
+
+    private LoginResponse createLoginResponse(UUID id, String nome, String email, String role) {
+        UserDetails userDetails =
+                new CustomUserDetails(
+                        id, email, "", singletonList(new SimpleGrantedAuthority(role))
+                );
+
+       UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        String token = tokenService.generateToken(auth);
+        return new LoginResponse(token, id, nome, email, role);
     }
 }
