@@ -1,9 +1,6 @@
 package com.fiap.gs2025.IncludIA_Java.controller;
 
-import com.fiap.gs2025.IncludIA_Java.dto.request.CandidateIdiomaRequest;
-import com.fiap.gs2025.IncludIA_Java.dto.request.EducationRequest;
-import com.fiap.gs2025.IncludIA_Java.dto.request.ExperienceRequest;
-import com.fiap.gs2025.IncludIA_Java.dto.request.VoluntariadoRequest;
+import com.fiap.gs2025.IncludIA_Java.dto.request.*;
 import com.fiap.gs2025.IncludIA_Java.dto.response.*;
 import com.fiap.gs2025.IncludIA_Java.service.CandidateProfileService;
 import jakarta.validation.Valid;
@@ -70,5 +67,10 @@ public class CandidateProfileController {
     public ResponseEntity<Void> deleteAccount() {
         profileService.deleteMyAccount();
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<CandidateProfileResponse> updateFullProfile(@RequestBody CandidateFullUpdateRequest request) {
+        return ResponseEntity.ok(profileService.updateFullProfile(request));
     }
 }

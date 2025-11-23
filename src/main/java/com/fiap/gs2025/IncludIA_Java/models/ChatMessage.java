@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "chat_messages")
+@Table(name = "t_inc_mensagem")
 public class ChatMessage {
     @Id
     private UUID id;
