@@ -2,6 +2,8 @@ package com.fiap.gs2025.IncludIA_Java.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +19,8 @@ public class Chat {
     @JoinColumn(name = "match_id", nullable = false, unique = true)
     private Match match;
 
-    @Column(nullable = false)
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     private boolean isAtive = true;

@@ -2,6 +2,7 @@ package com.fiap.gs2025.IncludIA_Java.controller;
 
 import com.fiap.gs2025.IncludIA_Java.dto.request.ChatMessageRequest;
 import com.fiap.gs2025.IncludIA_Java.dto.response.ChatMessageResponse;
+import com.fiap.gs2025.IncludIA_Java.dto.response.ChatPreviewResponse;
 import com.fiap.gs2025.IncludIA_Java.service.ChatService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,7 +39,11 @@ public class ChatController {
     public ResponseEntity<ChatMessageResponse> sendMessage(
             @PathVariable UUID chatId,
             @Valid @RequestBody ChatMessageRequest request) {
-        // O ChatService agora pega o senderId do SecurityContext E envia via WebSocket
         return ResponseEntity.status(201).body(chatService.sendMessage(chatId, request));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ChatPreviewResponse>> getMyChats() {
+        return ResponseEntity.ok(chatService.getMyChats());
     }
 }

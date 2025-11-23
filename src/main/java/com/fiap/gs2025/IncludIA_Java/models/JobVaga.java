@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiap.gs2025.IncludIA_Java.enums.ModeloTrabalho;
 import com.fiap.gs2025.IncludIA_Java.enums.TipoContrato;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.HashSet;
@@ -46,7 +48,8 @@ public class JobVaga {
 
     private boolean isAtiva;
 
-    @Column(nullable = false)
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     @JsonBackReference

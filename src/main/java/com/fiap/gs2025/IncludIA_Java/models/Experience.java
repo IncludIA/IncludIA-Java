@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "experiences")
+@Table(name = "t_inc_experiencia")
 public class Experience {
     @Id
     private UUID id;
