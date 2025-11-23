@@ -13,7 +13,14 @@ import java.util.UUID;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, UUID> {
+
     Optional<Chat> findByMatch(Match match);
-    @Query("SELECT c FROM Chat c WHERE c.match.candidate.id = :userId OR c.match.vaga.recruiter.id = :userId")
+
+    @Query("SELECT c FROM Chat c " +
+            "LEFT JOIN FETCH c.match m " +
+            "LEFT JOIN FETCH m.candidate cand " +
+            "LEFT JOIN FETCH m.vaga v " +
+            "LEFT JOIN FETCH v.recruiter r " +
+            "WHERE cand.id = :userId OR r.id = :userId")
     List<Chat> findChatsByUserId(@Param("userId") UUID userId);
 }
