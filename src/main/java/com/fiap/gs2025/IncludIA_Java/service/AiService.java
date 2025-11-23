@@ -2,7 +2,7 @@ package com.fiap.gs2025.IncludIA_Java.service;
 
 import com.fiap.gs2025.IncludIA_Java.models.Candidate;
 import com.fiap.gs2025.IncludIA_Java.models.Skill;
-import io.lettuce.core.dynamic.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
