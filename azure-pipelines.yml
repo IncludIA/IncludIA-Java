@@ -1,95 +1,80 @@
 trigger:
   - azure-pipelines
 
+pool:
+  vmImage: 'ubuntu-latest' # Agente Linux para rodar Docker e Java
+
 variables:
-  # --- Suas Variáveis ---
-  azureSubscription: 'azureSubscription'
-  acrConnection: 'acrConnection'
-  acrLoginServer: 'acrincludia2771.azurecr.io'
-  webAppName: 'app-includia-java-2771'
+  # --- CONFIGURAÇÕES ---
+  # Substitua pelo nome da Service Connection que criaremos no Passo 4.1
+  dockerRegistryServiceConnection: 'AcrConnection' 
+  
+  # Nome da imagem que será criada (pode manter este)
   imageRepository: 'includia-java-api'
   
-  # CAMINHO DA PASTA: Ajuste se necessário. 
-  # Deve ser o nome da pasta onde está o 'dockerfile' no seu Git.
-  javaRootPath: 'IncludIA-Java' 
-  dockerfilePath: '$(javaRootPath)/dockerfile'
+  # Caminho do Dockerfile dentro do repositório
+  dockerfilePath: '$(Build.SourcesDirectory)/dockerfiles/Dockerfile'
   
+  # Tag da imagem baseada no ID do Build (rastreabilidade total)
   tag: '$(Build.BuildId)'
-  vmImageName: 'ubuntu-latest'
+  
+  # Configuração do Maven
+  mavenPomFile: 'pom.xml'
 
 stages:
-  # ------------------------------------------------------------------
-  # ESTÁGIO 1: BUILD (Cria a Imagem que falta)
-  # ------------------------------------------------------------------
-  - stage: Build
-    displayName: Build and Push Stage
-    jobs:
-      - job: Build
-        displayName: Build Job
-        pool:
-          vmImage: $(vmImageName)
-        steps:
-          # Configura Java
-          - task: JavaToolInstaller@0
-            inputs:
-              versionSpec: '21'
-              jdkArchitectureOption: 'x64'
-              jdkSourceOption: 'PreInstalled'
-            displayName: 'Setup Java 21'
+- stage: Build
+  displayName: Build and Push Stage
+  jobs:
+  - job: Build
+    displayName: Build, Test and Dockerize
+    steps:
+    
+    # 1. Preparar o Java 17 (Padrão atual Spring Boot)
+    - task: JavaToolInstaller@0
+      inputs:
+        versionSpec: '17'
+        jdkArchitectureOption: 'x64'
+        jdkSourceOption: 'PreInstalled'
 
-          # Permissão para gradlew
-          - script: chmod +x $(javaRootPath)/gradlew
-            displayName: 'Grant execute permission to gradlew'
+    # 2. Rodar Testes Unitários e Gerar Pacote .JAR (Maven)
+    - task: Maven@4
+      displayName: 'Maven Build & Test'
+      inputs:
+        mavenPomFile: '$(mavenPomFile)'
+        goals: 'package' # Compila e empacota
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml' # Publica resultados de teste no Dashboard
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.17'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
 
-          # Compila e Testa (Gera o .jar)
-          - task: Gradle@3
-            displayName: 'Build and Test Java'
-            inputs:
-              workingDirectory: '$(javaRootPath)'
-              gradleWrapperFile: '$(javaRootPath)/gradlew'
-              tasks: 'build' # Roda build completo
-              publishJUnitResults: true
-              testResultsFiles: '**/TEST-*.xml'
-              javaHomeOption: 'JDKVersion'
-              jdkVersionOption: '1.17' # Compatibilidade Gradle
-              sonarQubeRunAnalysis: false 
+    # 3. Construir e Enviar Imagem Docker para o ACR
+    - task: Docker@2
+      displayName: Build and Push to ACR
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+          latest
 
-          # Cria e Envia a Imagem Docker (Resolve o erro "Manifest not found")
-          - task: Docker@2
-            displayName: 'Build and Push Docker Image'
-            inputs:
-              command: buildAndPush
-              repository: $(imageRepository)
-              dockerfile: $(dockerfilePath)
-              containerRegistry: $(acrConnection)
-              buildContext: '$(javaRootPath)'
-              tags: |
-                $(tag)
-                latest
+    # 4. Copiar arquivos de infraestrutura para o Artefato (Para a Release usar depois)
+    - task: CopyFiles@2
+      displayName: 'Copy Scripts to Artifact'
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)/scripts'
+        Contents: '**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/scripts'
 
-  # ------------------------------------------------------------------
-  # ESTÁGIO 2: DEPLOY (Agora vai funcionar pois a imagem existirá)
-  # ------------------------------------------------------------------
-  - stage: Deploy
-    displayName: Deploy Stage
-    dependsOn: Build    # Espera o Build terminar
-    condition: succeeded()
-    jobs:
-      - deployment: Deploy
-        displayName: Deploy to Azure Web App
-        environment: 'production'
-        pool:
-          vmImage: $(vmImageName)
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureWebAppContainer@1
-                  displayName: 'Azure Web App Deploy'
-                  inputs:
-                    azureSubscription: $(azureSubscription)
-                    appName: $(webAppName)
-                    containers: $(acrLoginServer)/$(imageRepository):$(tag)
-                    appSettings: |
-                      -SPRING_PROFILES_ACTIVE "prod"
-                      -PORT 80
+    # 5. Publicar Artefatos (Garante que a Release Pipeline enxergue este Build)
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
