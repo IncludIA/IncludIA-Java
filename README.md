@@ -20,8 +20,8 @@ A **Includ.IA Cognitive Engine** é o núcleo inteligente da plataforma Includ.I
 
 <div align="center">
 
-[![Deploy](https://img.shields.io/badge/☁️%20Deploy-Acessar%20Sistema-blue?style=for-the-badge)](https://INSIRA_SEU_LINK_DO_DEPLOY_AQUI)
-[![Swagger](https://img.shields.io/badge/📄%20Swagger-Documentação-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://INSIRA_SEU_LINK_DO_DEPLOY_AQUI/swagger-ui.html)
+[![Deploy](https://img.shields.io/badge/☁️%20Deploy-Acessar%20Sistema-blue?style=for-the-badge)](https://app-includia-java-2771.azurewebsites.net/)
+[![Swagger](https://img.shields.io/badge/📄%20Swagger-Documentação-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://app-includia-java-2771.azurewebsites.net/swagger-ui/index.html)
 
 [![Pitch](https://img.shields.io/badge/🎬%20Vídeo-Pitch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://INSIRA_SEU_LINK_DO_YOUTUBE_AQUI)
 [![Demo](https://img.shields.io/badge/📺%20Demo-Técnica-212121?style=for-the-badge&logo=youtube&logoColor=white)](https://INSIRA_SEU_LINK_DA_DEMO_AQUI)
