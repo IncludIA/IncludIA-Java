@@ -1,59 +1,63 @@
+# 🚀 Pipeline de CI para Includ.IA (Backend Java/Spring Boot)
+# Stack: Java 21, Gradle, Docker, Azure Container Registry
+
 trigger:
   - azure-pipelines
 
 pool:
-  vmImage: 'ubuntu-latest' # Agente Linux para rodar Docker e Java
+  vmImage: 'ubuntu-latest' # Agente Linux
 
 variables:
-  # --- CONFIGURAÇÕES ---
-  # Substitua pelo nome da Service Connection que criaremos no Passo 4.1
-  dockerRegistryServiceConnection: 'AcrConnection' 
+  dockerRegistryServiceConnection: 'AcrConnection'
   
-  # Nome da imagem que será criada (pode manter este)
+  azureSubscription: 'azureSubscription'
+  acrConnection: 'acrConnection' 
   imageRepository: 'includia-java-api'
-  
-  # Caminho do Dockerfile dentro do repositório
-  dockerfilePath: '$(Build.SourcesDirectory)/dockerfiles/Dockerfile'
-  
-  # Tag da imagem baseada no ID do Build (rastreabilidade total)
+  dockerfilePath: '$(Build.SourcesDirectory)/dockerfile'
   tag: '$(Build.BuildId)'
-  
-  # Configuração do Maven
-  mavenPomFile: 'pom.xml'
 
 stages:
 - stage: Build
-  displayName: Build and Push Stage
+  displayName: Build & Test Stage
   jobs:
   - job: Build
-    displayName: Build, Test and Dockerize
+    displayName: Build, Test and Push
     steps:
-    
-    # 1. Preparar o Java 17 (Padrão atual Spring Boot)
+
+    # 1. Configurar Java 21 (Essencial, pois o padrão pode ser 11 ou 17)
     - task: JavaToolInstaller@0
       inputs:
-        versionSpec: '17'
+        versionSpec: '21'
         jdkArchitectureOption: 'x64'
         jdkSourceOption: 'PreInstalled'
+      displayName: 'Setup Java 21'
 
-    # 2. Rodar Testes Unitários e Gerar Pacote .JAR (Maven)
-    - task: Maven@4
-      displayName: 'Maven Build & Test'
+    # 2. Dar permissão de execução ao Gradlew (Comum dar erro em Linux se esquecer)
+    - task: Bash@3
+      displayName: 'Chmod Gradlew'
       inputs:
-        mavenPomFile: '$(mavenPomFile)'
-        goals: 'package' # Compila e empacota
-        publishJUnitResults: true
-        testResultsFiles: '**/surefire-reports/TEST-*.xml' # Publica resultados de teste no Dashboard
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.17'
-        mavenVersionOption: 'Default'
-        mavenAuthenticateFeed: false
-        effectivePomSkip: false
-        sonarQubeRunAnalysis: false
+        targetType: 'inline'
+        script: 'chmod +x gradlew'
 
-    # 3. Construir e Enviar Imagem Docker para o ACR
+    # 3. Rodar Testes Unitários e Publicar Resultados (Requisito de QA/DevOps)
+    # Isso gera os gráficos de teste no Azure DevOps
+    - task: Gradle@3
+      displayName: 'Run Unit Tests'
+      inputs:
+        workingDirectory: ''
+        gradleWrapperFile: 'gradlew'
+        gradleOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.21'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'test'
+
+    # 4. Construir e Enviar Imagem Docker para o ACR
+    # O seu Dockerfile já faz o build do JAR (Multistage), então só mandamos buildar a imagem
     - task: Docker@2
-      displayName: Build and Push to ACR
+      displayName: 'Build and Push Docker Image'
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
@@ -63,15 +67,17 @@ stages:
           $(tag)
           latest
 
-    # 4. Copiar arquivos de infraestrutura para o Artefato (Para a Release usar depois)
+    # 5. Copiar Scripts de Infra para o Artefato
+    # Necessário para a Pipeline de Release (CD) saber onde implantar
     - task: CopyFiles@2
       displayName: 'Copy Scripts to Artifact'
       inputs:
-        SourceFolder: '$(Build.SourcesDirectory)/scripts'
+        SourceFolder: '$(Build.SourcesDirectory)/scripts' # Certifique-se que a pasta chama 'scripts'
         Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/scripts'
 
-    # 5. Publicar Artefatos (Garante que a Release Pipeline enxergue este Build)
+    # 6. Publicar Artefatos (Drop)
+    # Gatilho para a Pipeline de Release iniciar
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: drop'
       inputs:
