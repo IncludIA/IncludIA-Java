@@ -40,12 +40,20 @@ class AuthServiceTest {
     @Test
     @DisplayName("Deve registrar candidato com sucesso quando email não existe")
     void registerCandidate_Success() {
-        // Arrange
+        // Arrange - AGORA COM TODOS OS CAMPOS OBRIGATÓRIOS DO RECORD
         CandidateRegistrationRequest request = new CandidateRegistrationRequest(
-                "João Silva",
-                "joao@email.com",
-                "senha123",
-                "Desenvolvedor Java Pleno"
+                "João Silva",           // nome
+                "12345678901",          // cpf (NOVO)
+                "joao@email.com",       // email
+                "senha123",             // senha
+                "Desenvolvedor Java",   // resumoPerfil
+                "01310930",             // cep (NOVO)
+                "Av Paulista",          // logradouro (NOVO)
+                "1000",                 // numero (NOVO)
+                "Bela Vista",           // bairro (NOVO)
+                "São Paulo",            // cidade (NOVO - Obrigatório)
+                "SP",                   // estado (NOVO - Obrigatório)
+                30                      // raioBuscaKm (NOVO)
         );
 
         // Mocks
@@ -75,12 +83,20 @@ class AuthServiceTest {
     @Test
     @DisplayName("Deve lançar exceção ao tentar registrar candidato com email duplicado")
     void registerCandidate_DuplicateEmail() {
-        // Arrange
+        // Arrange - AGORA COM TODOS OS CAMPOS OBRIGATÓRIOS DO RECORD
         CandidateRegistrationRequest request = new CandidateRegistrationRequest(
-                "Maria Souza",
-                "maria@email.com",
-                "senha123",
-                "QA Engineer"
+                "Maria Souza",          // nome
+                "98765432100",          // cpf (NOVO)
+                "maria@email.com",      // email
+                "senha123",             // senha
+                "QA Engineer",          // resumoPerfil
+                "20000000",             // cep (NOVO)
+                "Rua Teste",            // logradouro (NOVO)
+                "10",                   // numero (NOVO)
+                "Centro",               // bairro (NOVO)
+                "Rio de Janeiro",       // cidade (NOVO - Obrigatório)
+                "RJ",                   // estado (NOVO - Obrigatório)
+                50                      // raioBuscaKm (NOVO)
         );
 
         // Mock: Simula que já existe um candidato com este email
