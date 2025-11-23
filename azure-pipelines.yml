@@ -1,24 +1,22 @@
-
 trigger:
-  -  azure-pipelines
+  - azure-pipelines
 
-resources:
-  - repositories:
-      - repository: self
 
 variables:
   azureSubscription: 'azureSubscription'
-  acrConnection: 'acrConnection'
+  acrConnection: 'acrConnection' 
+  
   acrLoginServer: 'acrincludia2771.azurecr.io'
   webAppName: 'app-includia-java-2771'
   imageRepository: 'includia-java-api'
+  
   javaRootPath: 'includia/includia-java/IncludIA-Java-866ff6379b1e7f27c8c396d1b3a9138f2e8c6cb5'
   dockerfilePath: '$(javaRootPath)/dockerfile'
+  
   tag: '$(Build.BuildId)'
   vmImageName: 'ubuntu-latest'
 
 stages:
- 
   - stage: Build
     displayName: Build and Push Stage
     jobs:
@@ -45,8 +43,8 @@ stages:
               tasks: 'test'
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
-              javaHomeOption: 'JDKVersion'
-              jdkVersionOption: '1.21'
+              javaHomeOption: 'JDKVersion' 
+              jdkVersionOption: '1.17'
               sonarQubeRunAnalysis: false 
 
           - task: Docker@2
@@ -55,7 +53,7 @@ stages:
               command: buildAndPush
               repository: $(imageRepository)
               dockerfile: $(dockerfilePath)
-              containerRegistry: $(dockerRegistryServiceConnection)
+              containerRegistry: $(acrConnection) # CORREÇÃO AQUI: Usando a variável correta
               buildContext: '$(javaRootPath)'
               tags: |
                 $(tag)
@@ -92,9 +90,9 @@ stages:
                 - task: AzureWebAppContainer@1
                   displayName: 'Azure Web App on Container Deploy'
                   inputs:
-                    azureSubscription: $(azureServiceConnection)
+                    azureSubscription: $(azureSubscription)
                     appName: $(webAppName)
-                    containers: $(containerRegistry)/$(imageRepository):$(tag)
+                    containers: $(acrLoginServer)/$(imageRepository):$(tag) 
                     appSettings: |
                       -SPRING_PROFILES_ACTIVE "prod"
                       -PORT 80
