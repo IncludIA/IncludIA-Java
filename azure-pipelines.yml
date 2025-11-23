@@ -10,9 +10,9 @@ variables:
   webAppName: 'app-includia-java-2771'
   imageRepository: 'includia-java-api'
   
-  javaRootPath: 'includia/includia-java/IncludIA-Java-866ff6379b1e7f27c8c396d1b3a9138f2e8c6cb5'
+  javaRootPath: 'IncludIA-Java'
   dockerfilePath: '$(javaRootPath)/dockerfile'
-  
+    
   tag: '$(Build.BuildId)'
   vmImageName: 'ubuntu-latest'
 
@@ -53,7 +53,7 @@ stages:
               command: buildAndPush
               repository: $(imageRepository)
               dockerfile: $(dockerfilePath)
-              containerRegistry: $(acrConnection) # CORREÇÃO AQUI: Usando a variável correta
+              containerRegistry: $(acrConnection)
               buildContext: '$(javaRootPath)'
               tags: |
                 $(tag)
