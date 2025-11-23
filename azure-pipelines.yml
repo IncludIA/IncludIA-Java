@@ -7,14 +7,13 @@ resources:
 variables:
   dockerRegistryServiceConnection: "256bec6c-8e4f-4886-9d5b-e3ae4e6407d2"
   azureSubscription: "azureSubscription"
-
   acrLoginServer: "acrincludia2771.azurecr.io"
   imageRepository: "includia-java-api"
   webAppName: "app-includia-java-2771"
 
-  projectRoot: "IncludIA-Java"
-  dockerfilePath: "$(projectRoot)/dockerfile"
-
+  # CORREÇÃO: Usando a raiz (.), pois seus arquivos parecem estar na base do repo
+  javaRootPath: "."
+  dockerfilePath: "$(javaRootPath)/dockerfile"
   tag: "$(Build.BuildId)"
   vmImageName: "ubuntu-latest"
 
@@ -27,7 +26,20 @@ stages:
         pool:
           vmImage: $(vmImageName)
         steps:
-          - script: chmod +x $(projectRoot)/gradlew
+          # [DEBUG] Lista os arquivos para sabermos onde está o gradlew se falhar
+          - script: |
+              echo "📂 Estrutura de arquivos na raiz:"
+              ls -R
+            displayName: "Debug: List Files"
+
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: "21"
+              jdkArchitectureOption: "x64"
+              jdkSourceOption: "PreInstalled"
+            displayName: "Setup Java 21"
+
+          - script: chmod +x $(javaRootPath)/gradlew
             displayName: "Grant execute permission to gradlew"
 
           - task: Docker@2
@@ -37,7 +49,7 @@ stages:
               repository: $(imageRepository)
               dockerfile: $(dockerfilePath)
               containerRegistry: $(dockerRegistryServiceConnection)
-              buildContext: "$(projectRoot)"
+              buildContext: "$(javaRootPath)"
               tags: |
                 $(tag)
                 latest
