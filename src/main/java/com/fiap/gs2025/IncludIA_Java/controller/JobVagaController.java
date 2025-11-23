@@ -67,11 +67,6 @@ public class JobVagaController {
         return ResponseEntity.created(location).body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<Page<JobVagaResponse>> getAllVagas(@PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
-        return ResponseEntity.ok(vagaService.getAllActiveVagas(pageable));
-    }
-
     @GetMapping("/my-vagas")
     public ResponseEntity<Page<JobVagaResponse>> getMyVagas(@PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
         return ResponseEntity.ok(vagaService.getVagasByAuthenticatedRecruiter(pageable));

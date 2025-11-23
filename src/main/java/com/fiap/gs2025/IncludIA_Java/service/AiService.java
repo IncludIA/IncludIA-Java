@@ -2,6 +2,7 @@ package com.fiap.gs2025.IncludIA_Java.service;
 
 import com.fiap.gs2025.IncludIA_Java.models.Candidate;
 import com.fiap.gs2025.IncludIA_Java.models.Skill;
+import io.lettuce.core.dynamic.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,7 +13,8 @@ import java.util.stream.Collectors;
 public class AiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String BASE_URL = "https://app-includia-iot-2771.azurewebsites.net";
+    @Value("${api.iot.url}")
+    private String BASE_URL;
 
     public String gerarDescricaoInclusiva(String titulo, String descricaoOriginal) {
         String url = BASE_URL + "/api/v1/vagas/inclusiva";
