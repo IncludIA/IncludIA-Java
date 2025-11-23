@@ -4,6 +4,8 @@ import com.fiap.gs2025.IncludIA_Java.dto.request.JobVagaRequest;
 import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateMatchResponse;
 import com.fiap.gs2025.IncludIA_Java.dto.response.CandidateProfileResponse;
 import com.fiap.gs2025.IncludIA_Java.dto.response.JobVagaResponse;
+import com.fiap.gs2025.IncludIA_Java.enums.ModeloTrabalho;
+import com.fiap.gs2025.IncludIA_Java.enums.TipoContrato;
 import com.fiap.gs2025.IncludIA_Java.service.JobVagaService;
 import com.fiap.gs2025.IncludIA_Java.service.MatchService;
 import jakarta.validation.Valid;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +35,15 @@ public class JobVagaController {
     @GetMapping("/{vagaId}/candidates-feed")
     public ResponseEntity<List<CandidateMatchResponse>> getCandidatesFeed(@PathVariable UUID vagaId) {
         return ResponseEntity.ok(matchService.getCandidatesFeedForJob(vagaId));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<JobVagaResponse>> getAllVagas(
+            @RequestParam(required = false) ModeloTrabalho modelo,
+            @RequestParam(required = false) TipoContrato tipo,
+            @RequestParam(required = false) BigDecimal minSalario,
+            @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
+        return ResponseEntity.ok(vagaService.findVagasWithFilters(modelo, tipo, minSalario, pageable));
     }
 
     @GetMapping("/candidate-detail/{candidateId}")

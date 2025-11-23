@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -66,6 +67,13 @@ public class CandidateProfileController {
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteAccount() {
         profileService.deleteMyAccount();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/push-token")
+    public ResponseEntity<Void> updatePushToken(@RequestBody Map<String, String> payload) {
+        String token = payload.get("token");
+        profileService.updatePushToken(token);
         return ResponseEntity.noContent().build();
     }
 
